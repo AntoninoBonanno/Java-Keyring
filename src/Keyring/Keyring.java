@@ -2,6 +2,9 @@ package Keyring;
 
 
 import Exceptions.KeyringException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StreamCorruptedException;
@@ -19,7 +22,7 @@ import java.util.regex.Pattern;
  * @author Nino
  */
 public class Keyring {    
-    public static final double version = 1.0;
+    public static final double version = 1.1;
     public static final String author = "NinoBon";
     
     private static final String nameFile = "keyring";
@@ -103,13 +106,43 @@ public class Keyring {
      * @throws KeyringException Se non sono stati inseriti webSite, username, email, password
      */
     public void addRow(String webSite, String username, String email, String password, String note) throws Exception{
-        System.out.print("Aggiungo una nuova riga alla tabella...   ");
+        System.out.print("Aggiungo una nuova riga...   ");
         if (webSite.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()){
             System.out.println("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password."); 
             throw new KeyringException("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password.","Attenzione",KeyringException.INFORMATION_MESSAGE);
         }
         Row r = new Row(webSite, username, email, password, note);
         tableKeys.add(r); 
+        System.out.println("Completato.");
+    }
+    
+    /**
+     * Modifica una riga della tabella contenente le password
+     * @param currentIndex Indice della riga da modificare
+     * @param webSite Sito web di riferimento
+     * @param username Username utilizzato
+     * @param email Email utilizzata per la registrazione
+     * @param password Password utilizzata
+     * @param note Eventuali note
+     * @throws KeyringException Se non sono stati inseriti webSite, username, email, password
+     */
+    public void editRow(int currentIndex, String webSite, String username, String email, String password, String note) throws Exception{
+        System.out.print("Modifico la riga " + currentIndex + "...   ");
+        if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
+            System.out.println("Seleziona una riga nella tabella."); 
+            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+        }
+        if (webSite.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()){
+            System.out.println("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password."); 
+            throw new KeyringException("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+        }
+        Row r = tableKeys.get(currentIndex); 
+        r.setWebSite(webSite);
+        r.setUsername(username);
+        r.setEmail(email);
+        r.setPassword(password);
+        r.setNote(note);
+        
         System.out.println("Completato.");
     }
 
@@ -119,7 +152,7 @@ public class Keyring {
      * @throws KeyringException Se l'indice non è valido
      */
     public void removeRow(int currentIndex) throws KeyringException{
-        System.out.print("Rimuovo una riga...   ");        
+        System.out.print("Rimuovo la riga " + currentIndex + "...   ");        
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
             System.out.println("Seleziona una riga nella tabella."); 
             throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
@@ -134,7 +167,7 @@ public class Keyring {
      * @throws KeyringException Se l'indice non è valido
      */
     public void moveUpRow(int currentIndex) throws KeyringException{
-        System.out.print("Porto sù una riga...   ");      
+        System.out.print("Porto sù la riga " + currentIndex + "...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
             System.out.println("Seleziona una riga nella tabella."); 
             throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
@@ -156,7 +189,7 @@ public class Keyring {
      * @throws KeyringException Se l'indice non è valido
      */
     public void moveDownRow(int currentIndex) throws KeyringException{
-        System.out.print("Porto giù una riga...   ");      
+        System.out.print("Porto giù la riga " + currentIndex + "...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
             System.out.println("Seleziona una riga nella tabella."); 
             throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
@@ -171,7 +204,29 @@ public class Keyring {
         tableKeys.set(currentIndex+1,r); 
         System.out.println("Completato.");
     }
-        
+    
+    /**
+     * Copia negli appunti l'elemento selezionato
+     * @param currentIndex Riga selezionata
+     * @param rowElement Row.ELEMENT_WEBSITE, Row.ELEMENT_USERNAME, Row.ELEMENT_EMAIL, Row.ELEMENT_PASSWORD, Row.ELEMENT_NOTE
+     * @throws Exceptions.KeyringException
+     */
+    public void copyToClipboard(int currentIndex, int rowElement) throws KeyringException{
+        System.out.print("Copio la cella (" + currentIndex + ", " + rowElement + ")...   ");      
+        if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
+            System.out.println("Seleziona una riga nella tabella."); 
+            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+        } 
+        String element = tableKeys.get(currentIndex).getElement(rowElement);
+        if(element == null){
+            System.out.println("Scelta elemento non valido."); 
+            throw new KeyringException("Scelta elemento non valido.","Errore",KeyringException.ERROR_MESSAGE);
+        }
+        StringSelection stringSelection = new StringSelection(element);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+        System.out.println("Copiato.");
+    }    
     
     /**
      * Salva su file la tabella con le password

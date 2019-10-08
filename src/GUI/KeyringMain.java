@@ -3,9 +3,18 @@ package GUI;
 
 import Exceptions.KeyringException;
 import Keyring.Keyring;
+import Keyring.Row;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -42,7 +51,7 @@ public class KeyringMain extends javax.swing.JFrame {
                 dispose();
             }
         });
-        
+                
         loadTable();
     }
 
@@ -55,6 +64,12 @@ public class KeyringMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu_tablePassword = new javax.swing.JPopupMenu();
+        jMenuItem_webSite = new javax.swing.JMenuItem();
+        jMenuItem_email = new javax.swing.JMenuItem();
+        jMenuItem_username = new javax.swing.JMenuItem();
+        jMenuItem_password = new javax.swing.JMenuItem();
+        jMenuItem_note = new javax.swing.JMenuItem();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_passwords = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -68,9 +83,109 @@ public class KeyringMain extends javax.swing.JFrame {
         jLabel_find = new javax.swing.JLabel();
         jButton_trova = new javax.swing.JButton();
         jButton_credits = new javax.swing.JButton();
+        jButton_edit = new javax.swing.JButton();
+
+        jPopupMenu_tablePassword.addPopupMenuListener(new PopupMenuListener() {
+
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        int rowAtPoint = jTable_passwords.rowAtPoint(SwingUtilities.convertPoint(jPopupMenu_tablePassword, new Point(0, 0), jTable_passwords));
+                        if (rowAtPoint > -1) {
+                            jTable_passwords.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        jMenuItem_webSite.setText("Copia Sito web");
+        jMenuItem_webSite.setToolTipText("");
+        jMenuItem_webSite.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_WEBSITE);
+                } catch (KeyringException ex) {
+                    JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
+                }
+            }
+        });
+        jPopupMenu_tablePassword.add(jMenuItem_webSite);
+
+        jMenuItem_email.setText("Copia Email");
+        jMenuItem_email.setToolTipText("");
+        jMenuItem_email.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_EMAIL);
+                } catch (KeyringException ex) {
+                    JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
+                }
+            }
+        });
+        jPopupMenu_tablePassword.add(jMenuItem_email);
+
+        jMenuItem_username.setText("Copia Username");
+        jMenuItem_username.setToolTipText("");
+        jMenuItem_username.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_USERNAME);
+                } catch (KeyringException ex) {
+                    JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
+                }
+            }
+        });
+        jPopupMenu_tablePassword.add(jMenuItem_username);
+
+        jMenuItem_password.setText("Copia Password");
+        jMenuItem_password.setToolTipText("");
+        jMenuItem_password.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_PASSWORD);
+                } catch (KeyringException ex) {
+                    JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
+                }
+            }
+        });
+        jPopupMenu_tablePassword.add(jMenuItem_password);
+
+        jMenuItem_note.setText("Copia Note");
+        jMenuItem_note.setToolTipText("");
+        jMenuItem_note.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_NOTE);
+                } catch (KeyringException ex) {
+                    JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
+                }
+            }
+        });
+        jPopupMenu_tablePassword.add(jMenuItem_note);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Key Ring");
+        setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
         jTable_passwords.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -95,7 +210,11 @@ public class KeyringMain extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable_passwords.setComponentPopupMenu(jPopupMenu_tablePassword);
         jTable_passwords.setRowHeight(20);
+        jTable_passwords.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            jButton_edit.setEnabled(jTable_passwords.getSelectedRow()>-1);
+        });
         jScrollPane1.setViewportView(jTable_passwords);
 
         jLabel1.setFont(new java.awt.Font("Script MT Bold", 0, 36)); // NOI18N
@@ -159,10 +278,18 @@ public class KeyringMain extends javax.swing.JFrame {
         });
 
         jButton_credits.setText("?");
-        jButton_credits.setRequestFocusEnabled(false);
+        jButton_credits.setFocusable(false);
         jButton_credits.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_creditsActionPerformed(evt);
+            }
+        });
+
+        jButton_edit.setText("Modifica riga");
+        jButton_edit.setEnabled(false);
+        jButton_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_editActionPerformed(evt);
             }
         });
 
@@ -193,6 +320,8 @@ public class KeyringMain extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jCheckBox_showPass)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_edit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_add)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_save))
@@ -232,7 +361,8 @@ public class KeyringMain extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_save)
                     .addComponent(jButton_add)
-                    .addComponent(jCheckBox_showPass))
+                    .addComponent(jCheckBox_showPass)
+                    .addComponent(jButton_edit))
                 .addGap(20, 20, 20))
         );
 
@@ -285,7 +415,7 @@ public class KeyringMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_downActionPerformed
 
     private void jButton_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_addActionPerformed
-        NewRow nr = new NewRow(this, true, keyring);
+        NewRow nr = new NewRow(this, true, keyring, -1);
         nr.setLocationRelativeTo(this);        
         nr.setVisible(true);
         
@@ -327,6 +457,19 @@ public class KeyringMain extends javax.swing.JFrame {
         c.setLocationRelativeTo(this);
         c.setVisible(true);
     }//GEN-LAST:event_jButton_creditsActionPerformed
+
+    private void jButton_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_editActionPerformed
+        if(jTable_passwords.getSelectedRows().length>1){
+            JOptionPane.showMessageDialog(this, "Seleziona una riga singola.\n", "Attenzione", JOptionPane.INFORMATION_MESSAGE); 
+            jTable_passwords.clearSelection(); 
+            return;
+        }
+        NewRow nr = new NewRow(this, true, keyring, jTable_passwords.getSelectedRow());
+        nr.setLocationRelativeTo(this);        
+        nr.setVisible(true);
+        
+        loadTable();
+    }//GEN-LAST:event_jButton_editActionPerformed
     
     private final Keyring keyring;
     private int [] search = null; //ricerca[0] riga e search[1] colonna dell'ultimo elemento trovato
@@ -334,6 +477,7 @@ public class KeyringMain extends javax.swing.JFrame {
     private javax.swing.JButton jButton_add;
     private javax.swing.JButton jButton_credits;
     private javax.swing.JButton jButton_down;
+    private javax.swing.JButton jButton_edit;
     private javax.swing.JButton jButton_remove;
     private javax.swing.JButton jButton_save;
     private javax.swing.JButton jButton_trova;
@@ -341,6 +485,12 @@ public class KeyringMain extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_showPass;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel_find;
+    private javax.swing.JMenuItem jMenuItem_email;
+    private javax.swing.JMenuItem jMenuItem_note;
+    private javax.swing.JMenuItem jMenuItem_password;
+    private javax.swing.JMenuItem jMenuItem_username;
+    private javax.swing.JMenuItem jMenuItem_webSite;
+    private javax.swing.JPopupMenu jPopupMenu_tablePassword;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_passwords;
     private javax.swing.JTextField jTextField_trova;
@@ -363,7 +513,7 @@ public class KeyringMain extends javax.swing.JFrame {
         });
         System.out.println("Completato.");
     }
-    
+        
     /**
      * Funzione trova, Ricerca il testo nella tabella
      * @param a a[0] riga e a[1] colonna da dove partire la search

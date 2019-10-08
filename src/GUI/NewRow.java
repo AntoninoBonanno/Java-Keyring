@@ -6,6 +6,7 @@
 package GUI;
 
 import Keyring.Keyring;
+import Keyring.Row;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,19 +14,20 @@ import javax.swing.JOptionPane;
  * @author Nino
  */
 public class NewRow extends javax.swing.JDialog {
-    
-    private final Keyring keyring;
-    
+       
     /**
      * Creates new form NewRow
      * @param parent
      * @param modal
      * @param k
+     * @param currentIndex -1 se è una nuova riga
      */
-    public NewRow(java.awt.Frame parent, boolean modal, Keyring k) {
+    public NewRow(java.awt.Frame parent, boolean modal, Keyring k, int currentIndex) {
         super(parent, modal);
         initComponents();
         this.keyring = k;
+        this.currentIndex = currentIndex;
+        setOldRow(currentIndex);
     }
 
     /**
@@ -163,13 +165,18 @@ public class NewRow extends javax.swing.JDialog {
         String password = jTextField_password.getText();
         String note = jTextArea_note.getText();
         try {
-            keyring.addRow(webSite, username, email, password, note);
+            if(currentIndex<0 || currentIndex > keyring.getTableKeys().size()) keyring.addRow(webSite, username, email, password, note);
+            else keyring.editRow(currentIndex, webSite, username, email, password, note);
+            
             this.dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_jButton_confirmActionPerformed
 
+    
+    private final Keyring keyring;
+    private final int currentIndex;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_abort;
     private javax.swing.JButton jButton_confirm;
@@ -185,4 +192,19 @@ public class NewRow extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField_username;
     private javax.swing.JTextField jTextField_website;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Inizializza gli input field con i vecchi valori
+     * @param currentIndex 
+     */
+    private void setOldRow(int currentIndex) {
+        if(currentIndex<0 || currentIndex > keyring.getTableKeys().size()) return;
+        Row r = keyring.getTableKeys().get(currentIndex);
+        
+        jTextField_website.setText(r.getWebSite());
+        jTextField_username.setText(r.getUsername());
+        jTextField_email.setText(r.getEmail());
+        jTextField_password.setText(r.getPassword());
+        jTextArea_note.setText(r.getNote());
+    }
 }

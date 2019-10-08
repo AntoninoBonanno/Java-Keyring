@@ -106,6 +106,10 @@
     <Component class="javax.swing.JButton" name="jButton_credits">
       <Properties>
         <Property name="text" type="java.lang.String" value="?"/>
+        <Property name="focusable" type="boolean" value="false"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="jPasswordField_MasterKey"/>
+        </Property>
         <Property name="requestFocusEnabled" type="boolean" value="false"/>
       </Properties>
       <Events>
