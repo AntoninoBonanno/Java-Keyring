@@ -129,8 +129,8 @@ public class Keyring {
     public void editRow(int currentIndex, String webSite, String username, String email, String password, String note) throws Exception{
         System.out.print("Modifico la riga " + currentIndex + "...   ");
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga nella tabella."); 
-            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            System.out.println("Seleziona una riga della tabella."); 
+            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
         }
         if (webSite.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()){
             System.out.println("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password."); 
@@ -154,8 +154,8 @@ public class Keyring {
     public void removeRow(int currentIndex) throws KeyringException{
         System.out.print("Rimuovo la riga " + currentIndex + "...   ");        
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga nella tabella."); 
-            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            System.out.println("Seleziona una riga della tabella."); 
+            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
         } 
         tableKeys.remove(currentIndex);
         System.out.println("Completato.");
@@ -169,8 +169,8 @@ public class Keyring {
     public void moveUpRow(int currentIndex) throws KeyringException{
         System.out.print("Porto sù la riga " + currentIndex + "...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga nella tabella."); 
-            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            System.out.println("Seleziona una riga della tabella."); 
+            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
         } 
         if (currentIndex == 0){
             System.out.println("La riga è in cima.");      
@@ -191,8 +191,8 @@ public class Keyring {
     public void moveDownRow(int currentIndex) throws KeyringException{
         System.out.print("Porto giù la riga " + currentIndex + "...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga nella tabella."); 
-            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            System.out.println("Seleziona una riga della tabella."); 
+            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
         } 
         if (currentIndex == tableKeys.size()-1){
             System.out.println("La riga è alla base.");                    
@@ -214,8 +214,8 @@ public class Keyring {
     public void copyToClipboard(int currentIndex, int rowElement) throws KeyringException{
         System.out.print("Copio la cella (" + currentIndex + ", " + rowElement + ")...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga nella tabella."); 
-            throw new KeyringException("Seleziona una riga nella tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            System.out.println("Seleziona una riga della tabella."); 
+            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
         } 
         String element = tableKeys.get(currentIndex).getElement(rowElement);
         if(element == null){
