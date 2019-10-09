@@ -19,3 +19,8 @@ A simple tool to securely store passwords.
 3. Save
 
 NB: at the first use the inserted master key will be used to encrypt the new file.
+
+
+
+
+Tags: Password Manager, Gestione Password, Keyring Manager
