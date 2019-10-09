@@ -89,7 +89,6 @@ public class Autenticate extends javax.swing.JFrame {
 
         jButton_credits.setText("?");
         jButton_credits.setFocusable(false);
-        jButton_credits.setNextFocusableComponent(jPasswordField_MasterKey);
         jButton_credits.setRequestFocusEnabled(false);
         jButton_credits.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
