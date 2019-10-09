@@ -12,7 +12,7 @@ ___
 
 A simple tool to securely store passwords.
 
-** Instructions: **
+**Instructions:**
 
 1. Insert a master key
 2. Enter passwords
