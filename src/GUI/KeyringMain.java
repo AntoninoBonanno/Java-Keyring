@@ -5,6 +5,7 @@ import Exceptions.KeyringException;
 import Keyring.Keyring;
 import Keyring.Row;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -184,8 +185,10 @@ public class KeyringMain extends javax.swing.JFrame {
         jPopupMenu_tablePassword.add(jMenuItem_note);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Key Ring");
+        setTitle("Keyring");
+        setAlwaysOnTop(true);
         setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
 
         jTable_passwords.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -217,8 +220,7 @@ public class KeyringMain extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable_passwords);
 
-        jLabel1.setFont(new java.awt.Font("Script MT Bold", 0, 36)); // NOI18N
-        jLabel1.setText("KeyRing");
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png"))); // NOI18N
 
         jButton_add.setText("Aggiungi riga");
         jButton_add.addActionListener(new java.awt.event.ActionListener() {

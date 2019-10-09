@@ -7,6 +7,7 @@ package GUI;
 
 import Keyring.Keyring;
 import Keyring.Row;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**
@@ -54,7 +55,8 @@ public class NewRow extends javax.swing.JDialog {
         jButton_confirm = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Key Ring - Nuova riga");
+        setTitle("Keyring - Nuova riga");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
 
         jLabel1.setText("Sito web:");
 

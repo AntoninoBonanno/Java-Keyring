@@ -3,6 +3,7 @@ package GUI;
 
 import Exceptions.KeyringException;
 import Keyring.Keyring;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -65,15 +66,16 @@ public class Autenticate extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton_autenticate = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPasswordField_MasterKey = new javax.swing.JPasswordField();
         jButton_credits = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel_version = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Key Ring");
+        setTitle("Keyring");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
         setResizable(false);
 
         jButton_autenticate.setText("Accedi");
@@ -82,9 +84,6 @@ public class Autenticate extends javax.swing.JFrame {
                 jButton_autenticateActionPerformed(evt);
             }
         });
-
-        jLabel1.setFont(new java.awt.Font("Script MT Bold", 0, 36)); // NOI18N
-        jLabel1.setText("KeyRing");
 
         jLabel2.setText("Inserisci la master Key");
 
@@ -102,6 +101,8 @@ public class Autenticate extends javax.swing.JFrame {
 
         jLabel_version.setText("v. "+Keyring.version);
 
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,7 +118,7 @@ public class Autenticate extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(0, 202, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton_credits))
                     .addGroup(layout.createSequentialGroup()
@@ -131,8 +132,8 @@ public class Autenticate extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_credits))
+                    .addComponent(jButton_credits)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_autenticate)
@@ -171,7 +172,7 @@ public class Autenticate extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_autenticate;
     private javax.swing.JButton jButton_credits;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel_version;

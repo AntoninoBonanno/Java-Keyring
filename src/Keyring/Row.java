@@ -19,6 +19,7 @@ public class Row implements Serializable{
     public static final int ELEMENT_PASSWORD = 3;
     public static final int ELEMENT_NOTE = 4;
     
+    private static final long serialVersionUID = 1999L;
     private String webSite, username, email, password, note;
 
     public Row(String webSite, String username, String email, String password, String note) {
