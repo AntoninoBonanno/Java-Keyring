@@ -8,6 +8,8 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StreamCorruptedException;
+import java.text.SimpleDateFormat;
+import java.time.temporal.TemporalAdjusters;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
@@ -44,7 +46,7 @@ public class Keyring {
                 "File non trovato.",
                 KeyringException.INFORMATION_MESSAGE
             );
-        }
+        }        
         System.out.println("Trovato.");
         return true;
     }
@@ -230,12 +232,15 @@ public class Keyring {
     
     /**
      * Salva su file la tabella con le password
+     * @return Restituisce la data e l'orario di salvataggio
      * @throws KeyringException
      */
-    public void save() throws KeyringException{ 
+    public String save() throws KeyringException{ 
         System.out.println("Salvo il file contenente le password...");                
         CryptoUtils.encrypt(nameFile, MasterKey, tableKeys);         
         System.out.println("Salvataggio riuscito.");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");		
+        return sdf.format(System.currentTimeMillis());         
     }
     
     /**
@@ -255,5 +260,18 @@ public class Keyring {
             System.out.println("Errore: "+ ex.getMessage() + "Password non valida.\nCaricamento file non riuscito.");
             throw new KeyringException("Password non corretta. Non è possibile aprire il file.", "Non è possibile aprire il file.", KeyringException.WARNING_MESSAGE);
         }
+    }
+    
+    /**
+     * Recupera la data dell'ultima modifica del file contenente le password
+     * @return Data ultima modifica file password
+     */
+    public String getEditDateFile(){
+        File file = new File(nameFile);	
+        if (file.exists()) {            
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");		
+            return sdf.format(file.lastModified());
+        }
+        return "File mai salvato.";
     }
 }

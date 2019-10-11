@@ -12,11 +12,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -37,8 +42,9 @@ public class KeyringMain extends javax.swing.JFrame {
     public KeyringMain(Keyring keyring) {
         initComponents();
         this.keyring = keyring;
-        javax.swing.JFrame me = this;
+        jLabel_editDate.setText(keyring.getEditDateFile());
         
+        javax.swing.JFrame me = this;
         addWindowListener(new WindowAdapter()
         {
             @Override
@@ -81,10 +87,10 @@ public class KeyringMain extends javax.swing.JFrame {
         jButton_save = new javax.swing.JButton();
         jCheckBox_showPass = new javax.swing.JCheckBox();
         jTextField_trova = new javax.swing.JTextField();
-        jLabel_find = new javax.swing.JLabel();
-        jButton_trova = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         jButton_credits = new javax.swing.JButton();
         jButton_edit = new javax.swing.JButton();
+        jLabel_editDate = new javax.swing.JLabel();
 
         jPopupMenu_tablePassword.addPopupMenuListener(new PopupMenuListener() {
 
@@ -186,7 +192,6 @@ public class KeyringMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Keyring");
-        setAlwaysOnTop(true);
         setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
 
@@ -219,6 +224,36 @@ public class KeyringMain extends javax.swing.JFrame {
             jButton_edit.setEnabled(jTable_passwords.getSelectedRow()>-1);
         });
         jScrollPane1.setViewportView(jTable_passwords);
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(jTable_passwords.getModel());
+        jTable_passwords.setRowSorter(rowSorter);
+
+        jTextField_trova.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String text = jTextField_trova.getText();
+
+                if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String text = jTextField_trova.getText();
+
+                if (text.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png"))); // NOI18N
 
@@ -269,15 +304,7 @@ public class KeyringMain extends javax.swing.JFrame {
 
         jTextField_trova.setToolTipText("Inserisci il nome della disciplina da cercare");
 
-        jLabel_find.setText("Trova...");
-
-        jButton_trova.setText("Trova");
-        jButton_trova.setToolTipText("Trova disciplina");
-        jButton_trova.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_trovaActionPerformed(evt);
-            }
-        });
+        jLabel2.setText("Trova:");
 
         jButton_credits.setText("?");
         jButton_credits.setFocusable(false);
@@ -295,6 +322,9 @@ public class KeyringMain extends javax.swing.JFrame {
             }
         });
 
+        jLabel_editDate.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel_editDate.setText("File mai salvato.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -310,24 +340,24 @@ public class KeyringMain extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_trova))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel_find)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton_credits))))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton_credits, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jCheckBox_showPass)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 414, Short.MAX_VALUE)
                         .addComponent(jButton_edit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_add)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton_save))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel_editDate, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -339,17 +369,12 @@ public class KeyringMain extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel_find)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jButton_credits)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton_credits)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton_trova))
-                        .addGap(9, 9, 9)))
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(80, 80, 80)
@@ -358,14 +383,16 @@ public class KeyringMain extends javax.swing.JFrame {
                         .addComponent(jButton_remove, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_down, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_save)
                     .addComponent(jButton_add)
                     .addComponent(jCheckBox_showPass)
                     .addComponent(jButton_edit))
-                .addGap(20, 20, 20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel_editDate)
+                .addContainerGap())
         );
 
         pack();
@@ -426,7 +453,7 @@ public class KeyringMain extends javax.swing.JFrame {
 
     private void jButton_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_saveActionPerformed
     try {
-        keyring.save();
+        jLabel_editDate.setText(keyring.save());
         JOptionPane.showMessageDialog(this, "Salvataggio eseguito con successo.\n", "Salvataggio", JOptionPane.INFORMATION_MESSAGE); 
     } catch (KeyringException ex) {
         JOptionPane.showMessageDialog(this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
@@ -439,20 +466,6 @@ public class KeyringMain extends javax.swing.JFrame {
         System.out.println(jCheckBox_showPass.isSelected() ? "Mostro le password." : "Nascondo le password.");
         loadTable();
     }//GEN-LAST:event_jCheckBox_showPassActionPerformed
-
-    private void jButton_trovaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_trovaActionPerformed
-        int [] b=new int[2];
-        if(search!=null){b[0]=search[0]+1; b[1]=0;}
-        else {b=null;}
-        try {
-            search=trova(b);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Inserisci un testo da cercare.", "Nessun testo inserito!", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        if(search==null){ jLabel_find.setText("Fine ricerca."); JOptionPane.showMessageDialog(this,"Ricerca completata.\n","Ricerca completata.", JOptionPane.INFORMATION_MESSAGE);}
-        else jLabel_find.setText("Trova successivo...");
-    }//GEN-LAST:event_jButton_trovaActionPerformed
 
     private void jButton_creditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_creditsActionPerformed
         Credits c = new Credits(this, true);
@@ -474,7 +487,6 @@ public class KeyringMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_editActionPerformed
     
     private final Keyring keyring;
-    private int [] search = null; //ricerca[0] riga e search[1] colonna dell'ultimo elemento trovato
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_add;
     private javax.swing.JButton jButton_credits;
@@ -482,11 +494,11 @@ public class KeyringMain extends javax.swing.JFrame {
     private javax.swing.JButton jButton_edit;
     private javax.swing.JButton jButton_remove;
     private javax.swing.JButton jButton_save;
-    private javax.swing.JButton jButton_trova;
     private javax.swing.JButton jButton_up;
     private javax.swing.JCheckBox jCheckBox_showPass;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel_find;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel_editDate;
     private javax.swing.JMenuItem jMenuItem_email;
     private javax.swing.JMenuItem jMenuItem_note;
     private javax.swing.JMenuItem jMenuItem_password;
@@ -497,7 +509,7 @@ public class KeyringMain extends javax.swing.JFrame {
     private javax.swing.JTable jTable_passwords;
     private javax.swing.JTextField jTextField_trova;
     // End of variables declaration//GEN-END:variables
-
+   
     /**
      * Vengono ricaricati i dati della tabella
      */   
@@ -514,32 +526,6 @@ public class KeyringMain extends javax.swing.JFrame {
             table.addRow(row);
         });
         System.out.println("Completato.");
-    }
-        
-    /**
-     * Funzione trova, Ricerca il testo nella tabella
-     * @param a a[0] riga e a[1] colonna da dove partire la search
-     * @return int[] dove int[0] è la riga e int[1] è la colonna dove è stato trovato il testo
-     * @throws Exception se jTextField_trova è vuoto
-     */
-    private int[] trova(int [] a) throws Exception{
-        String target = jTextField_trova.getText().toLowerCase();
-        if (jTextField_trova.getText().trim().isEmpty()) throw new Exception();
-        
-        if(a==null) {a=new int[2]; a[0]=0; a[1]=1;}
-        int [] b=a;
-        for(int row = a[0]; row < jTable_passwords.getRowCount(); row++){
-            String next = jTable_passwords.getValueAt(row, 2).toString().toLowerCase();
-                if(next.contains(target))
-                {       
-                     b[0]=row;
-                     b[1]=1;
-                     jTable_passwords.scrollRectToVisible(jTable_passwords.getCellRect(row, 0, true));
-                     jTable_passwords.setRowSelectionInterval(row, row);
-                     return b;
-                }
-            }
-        return null;
-    }
+    }     
     
 }
