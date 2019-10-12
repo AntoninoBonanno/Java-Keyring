@@ -38,7 +38,8 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="202" max="32767" attributes="0"/>
+                      <EmptySpace pref="95" max="32767" attributes="0"/>
+                      <Component id="jCheckBox_showPass" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
@@ -69,7 +70,10 @@
                   <Component id="jPasswordField_MasterKey" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jCheckBox_showPass" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel_version" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -126,6 +130,14 @@
           <Image iconType="3" name="/Images/logo.png"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="jCheckBox_showPass">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Mostra password"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="char defaultEchoChar = jPasswordField_MasterKey.getEchoChar();&#xa;&#xa;jCheckBox_showPass.addItemListener(new ItemListener() {&#xa;    public void itemStateChanged(ItemEvent e) {&#xa;        if (e.getStateChange() == ItemEvent.SELECTED) {&#xa;            jPasswordField_MasterKey.setEchoChar((char) 0);&#xa;        } else {&#xa;            jPasswordField_MasterKey.setEchoChar(defaultEchoChar);&#xa;        }&#xa;    }&#xa;});"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

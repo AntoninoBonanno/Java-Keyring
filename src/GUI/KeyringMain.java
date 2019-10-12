@@ -88,9 +88,14 @@ public class KeyringMain extends javax.swing.JFrame {
         jCheckBox_showPass = new javax.swing.JCheckBox();
         jTextField_trova = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton_credits = new javax.swing.JButton();
         jButton_edit = new javax.swing.JButton();
         jLabel_editDate = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem_editMasterKey = new javax.swing.JMenuItem();
+        jMenuItem_exit = new javax.swing.JMenuItem();
+        jMenu_credits = new javax.swing.JMenu();
+        jMenuItem_credits = new javax.swing.JMenuItem();
 
         jPopupMenu_tablePassword.addPopupMenuListener(new PopupMenuListener() {
 
@@ -306,14 +311,6 @@ public class KeyringMain extends javax.swing.JFrame {
 
         jLabel2.setText("Trova:");
 
-        jButton_credits.setText("?");
-        jButton_credits.setFocusable(false);
-        jButton_credits.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_creditsActionPerformed(evt);
-            }
-        });
-
         jButton_edit.setText("Modifica riga");
         jButton_edit.setEnabled(false);
         jButton_edit.addActionListener(new java.awt.event.ActionListener() {
@@ -324,6 +321,40 @@ public class KeyringMain extends javax.swing.JFrame {
 
         jLabel_editDate.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel_editDate.setText("File mai salvato.");
+
+        jMenu1.setText("File");
+
+        jMenuItem_editMasterKey.setText("Modifica master Key");
+        jMenuItem_editMasterKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_editMasterKeyActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem_editMasterKey);
+
+        jMenuItem_exit.setText("Esci");
+        jMenuItem_exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_exitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem_exit);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu_credits.setText("?");
+
+        jMenuItem_credits.setText("Credits");
+        jMenuItem_credits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem_creditsActionPerformed(evt);
+            }
+        });
+        jMenu_credits.add(jMenuItem_credits);
+
+        jMenuBar1.add(jMenu_credits);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -340,12 +371,9 @@ public class KeyringMain extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton_credits, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jCheckBox_showPass)
@@ -364,17 +392,12 @@ public class KeyringMain extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton_credits)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField_trova, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)))
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(80, 80, 80)
@@ -383,7 +406,7 @@ public class KeyringMain extends javax.swing.JFrame {
                         .addComponent(jButton_remove, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_down, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_save)
@@ -392,7 +415,7 @@ public class KeyringMain extends javax.swing.JFrame {
                     .addComponent(jButton_edit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_editDate)
-                .addContainerGap())
+                .addGap(32, 32, 32))
         );
 
         pack();
@@ -467,12 +490,6 @@ public class KeyringMain extends javax.swing.JFrame {
         loadTable();
     }//GEN-LAST:event_jCheckBox_showPassActionPerformed
 
-    private void jButton_creditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_creditsActionPerformed
-        Credits c = new Credits(this, true);
-        c.setLocationRelativeTo(this);
-        c.setVisible(true);
-    }//GEN-LAST:event_jButton_creditsActionPerformed
-
     private void jButton_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_editActionPerformed
         if(jTable_passwords.getSelectedRows().length>1){
             JOptionPane.showMessageDialog(this, "Seleziona una riga singola.\n", "Attenzione", JOptionPane.INFORMATION_MESSAGE); 
@@ -485,11 +502,28 @@ public class KeyringMain extends javax.swing.JFrame {
         
         loadTable();
     }//GEN-LAST:event_jButton_editActionPerformed
+
+    private void jMenuItem_editMasterKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_editMasterKeyActionPerformed
+        EditMasterKey e = new EditMasterKey(this, true, keyring);
+        e.setLocationRelativeTo(this);
+        e.setVisible(true);
+        
+        jLabel_editDate.setText(keyring.getEditDateFile());
+    }//GEN-LAST:event_jMenuItem_editMasterKeyActionPerformed
+
+    private void jMenuItem_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_exitActionPerformed
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jMenuItem_exitActionPerformed
+
+    private void jMenuItem_creditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_creditsActionPerformed
+        Credits c = new Credits(this, true);
+        c.setLocationRelativeTo(this);
+        c.setVisible(true);
+    }//GEN-LAST:event_jMenuItem_creditsActionPerformed
     
     private final Keyring keyring;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_add;
-    private javax.swing.JButton jButton_credits;
     private javax.swing.JButton jButton_down;
     private javax.swing.JButton jButton_edit;
     private javax.swing.JButton jButton_remove;
@@ -499,11 +533,17 @@ public class KeyringMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_editDate;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem_credits;
+    private javax.swing.JMenuItem jMenuItem_editMasterKey;
     private javax.swing.JMenuItem jMenuItem_email;
+    private javax.swing.JMenuItem jMenuItem_exit;
     private javax.swing.JMenuItem jMenuItem_note;
     private javax.swing.JMenuItem jMenuItem_password;
     private javax.swing.JMenuItem jMenuItem_username;
     private javax.swing.JMenuItem jMenuItem_webSite;
+    private javax.swing.JMenu jMenu_credits;
     private javax.swing.JPopupMenu jPopupMenu_tablePassword;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_passwords;

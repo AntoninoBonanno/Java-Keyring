@@ -1,19 +1,11 @@
 package GUI;
 
-
 import Exceptions.KeyringException;
 import Keyring.Keyring;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
+import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,37 +17,18 @@ import javax.swing.KeyStroke;
  *
  * @author Nino
  */
-public class Autenticate extends javax.swing.JFrame {
-    
+public class EditMasterKey extends javax.swing.JDialog {
+
     /**
-     * Creates new form Autenticate
+     * Creates new form EditMasterKEy
+     * @param parent
+     * @param modal
+     * @param keyring
      */
-    public Autenticate() {
+    public EditMasterKey(java.awt.Frame parent, boolean modal, Keyring keyring) {
+        super(parent, modal);
         initComponents();
-        javax.swing.JFrame me = this;
-        
-        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0),"clickButton");
-        this.getRootPane().getActionMap().put("clickButton",new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jButton_autenticate.doClick();                
-            }
-        });
-        
-        addWindowListener(new WindowAdapter()
-        {
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                System.out.println("\n<----- KEYRING ----->");
-            }
-        });
-        
-        try {
-            Keyring.checkFile();
-        } catch (KeyringException ex) {
-            JOptionPane.showMessageDialog(me, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
-        }
+        this.keyring = keyring;
     }
 
     /**
@@ -67,28 +40,22 @@ public class Autenticate extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton_autenticate = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jPasswordField_MasterKey = new javax.swing.JPasswordField();
+        jButton_confirm = new javax.swing.JButton();
         jButton_credits = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel_version = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jCheckBox_showPass = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Keyring");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
-        setResizable(false);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modifica master Key");
+        setPreferredSize(new java.awt.Dimension(332, 165));
 
-        jButton_autenticate.setText("Accedi");
-        jButton_autenticate.addActionListener(new java.awt.event.ActionListener() {
+        jButton_confirm.setText("Conferma");
+        jButton_confirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_autenticateActionPerformed(evt);
+                jButton_confirmActionPerformed(evt);
             }
         });
-
-        jLabel2.setText("Inserisci la master Key");
 
         jButton_credits.setText("?");
         jButton_credits.setFocusable(false);
@@ -99,11 +66,8 @@ public class Autenticate extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setText("By " + Keyring.author);
-
-        jLabel_version.setText("v. "+Keyring.version);
-
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png"))); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Inserisci la nuova master Key");
 
         jCheckBox_showPass.setText("Mostra password");
 
@@ -115,43 +79,32 @@ public class Autenticate extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel_version))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
-                        .addComponent(jCheckBox_showPass))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton_credits))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPasswordField_MasterKey)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPasswordField_MasterKey, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_autenticate)))
+                        .addComponent(jButton_confirm))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCheckBox_showPass)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_credits)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_autenticate)
+                    .addComponent(jButton_confirm)
                     .addComponent(jPasswordField_MasterKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jCheckBox_showPass))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_version)
-                    .addComponent(jLabel9))
-                .addContainerGap())
+                .addComponent(jCheckBox_showPass)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         char defaultEchoChar = jPasswordField_MasterKey.getEchoChar();
@@ -169,33 +122,30 @@ public class Autenticate extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_autenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_autenticateActionPerformed
+    private void jButton_confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_confirmActionPerformed
         try {
             String masterKey = String.valueOf(jPasswordField_MasterKey.getPassword());
-            
-            KeyringMain k = new KeyringMain(new Keyring(masterKey));
-            k.setLocationRelativeTo(this);
-            k.setVisible(true);
-            this.dispose();
+            keyring.setMasterKey(masterKey);
+            keyring.save();
+            JOptionPane.showMessageDialog(this, "Hai aggiornato correttamente la master key.", "Aggiornamento master key", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         } catch (KeyringException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
         }
-    }//GEN-LAST:event_jButton_autenticateActionPerformed
+    }//GEN-LAST:event_jButton_confirmActionPerformed
 
     private void jButton_creditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_creditsActionPerformed
-        Credits c = new Credits(this, true);
+        Credits c = new Credits((Frame) this.getParent(), true);
         c.setLocationRelativeTo(this);
         c.setVisible(true);
     }//GEN-LAST:event_jButton_creditsActionPerformed
 
+    private final Keyring keyring;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_autenticate;
+    private javax.swing.JButton jButton_confirm;
     private javax.swing.JButton jButton_credits;
     private javax.swing.JCheckBox jCheckBox_showPass;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabel_version;
     private javax.swing.JPasswordField jPasswordField_MasterKey;
     // End of variables declaration//GEN-END:variables
 }
