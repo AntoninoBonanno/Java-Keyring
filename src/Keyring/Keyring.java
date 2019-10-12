@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StreamCorruptedException;
 import java.text.SimpleDateFormat;
-import java.time.temporal.TemporalAdjusters;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
@@ -24,12 +23,12 @@ import java.util.regex.Pattern;
  * @author Nino
  */
 public class Keyring {    
-    public static final double version = 1.1;
+    public static final double version = 1.2;
     public static final String author = "NinoBon";
     
     private static final String nameFile = "keyring";
         
-    private final String MasterKey;
+    private String MasterKey;
     private LinkedList<Row> tableKeys;
 
     /**
@@ -56,9 +55,8 @@ public class Keyring {
      * @param MasterKey chiave primaria per cifrare/decifrare il file contenente le password
      * @throws KeyringException Se la MasterKey non ha il corretto formato si genera un'eccezione
      */
-    public Keyring(String MasterKey) throws KeyringException{
-        verifyMasterKey(MasterKey);
-        this.MasterKey = MasterKey;
+    public Keyring(String MasterKey) throws KeyringException{        
+        setMasterKey(MasterKey);
         load();
     }
           
@@ -88,6 +86,15 @@ public class Keyring {
             "Attenzione",
             KeyringException.INFORMATION_MESSAGE
         );
+    }
+
+    /**
+     * Aggiorno la masterKey
+     * @param MasterKey chiave primaria per cifrare/decifrare il file contenente le password
+     * @throws KeyringException 
+     */
+    public void setMasterKey(String MasterKey) throws KeyringException {        
+        this.MasterKey = verifyMasterKey(MasterKey);
     }
     
     /**
