@@ -17,7 +17,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_webSite.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_WEBSITE);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_webSite.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_WEBSITE);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
           </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_email">
@@ -26,7 +26,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_email.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_EMAIL);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_email.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_EMAIL);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
           </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_username">
@@ -35,7 +35,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_username.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_USERNAME);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_username.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_USERNAME);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
           </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_password">
@@ -44,7 +44,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_password.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_PASSWORD);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_password.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_PASSWORD);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
           </AuxValues>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuItem_note">
@@ -53,7 +53,7 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_note.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_NOTE);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="jMenuItem_note.addActionListener(new ActionListener() {&#xa;    @Override&#xa;    public void actionPerformed(ActionEvent e) {&#xa;        try {&#xa;            keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_NOTE);&#xa;        } catch (KeyringException ex) {&#xa;            JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());&#xa;        }&#xa;    }&#xa;});"/>
           </AuxValues>
         </MenuItem>
       </SubComponents>
@@ -222,7 +222,7 @@
                 <Column editable="false" title="Note" type="java.lang.String"/>
               </Table>
             </Property>
-            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="TableRowSorter&lt;TableModel&gt; rowSorter = new TableRowSorter&lt;&gt;(jTable_passwords.getModel());&#xa;        jTable_passwords.setRowSorter(rowSorter);&#xa;        &#xa;        jTextField_trova.getDocument().addDocumentListener(new DocumentListener() {&#xa;            @Override&#xa;            public void insertUpdate(DocumentEvent e) {&#xa;                String text = jTextField_trova.getText();&#xa;&#xa;                if (text.trim().length() == 0) {&#xa;                    rowSorter.setRowFilter(null);&#xa;                } else {&#xa;                    rowSorter.setRowFilter(RowFilter.regexFilter(&quot;(?i)&quot; + text));&#xa;                }&#xa;            }&#xa;&#xa;            @Override&#xa;            public void removeUpdate(DocumentEvent e) {&#xa;                String text = jTextField_trova.getText();&#xa;&#xa;                if (text.trim().length() == 0) {&#xa;                    rowSorter.setRowFilter(null);&#xa;                } else {&#xa;                    rowSorter.setRowFilter(RowFilter.regexFilter(&quot;(?i)&quot; + text));&#xa;                }&#xa;            }&#xa;&#xa;            @Override&#xa;            public void changedUpdate(DocumentEvent e) {               &#xa;            }&#xa;        });">
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="TableRowSorter&lt;TableModel&gt; rowSorter = new TableRowSorter&lt;&gt;(jTable_passwords.getModel());&#xa;        jTable_passwords.setRowSorter(rowSorter);&#xa;        &#xa;        jTextField_trova.getDocument().addDocumentListener(new DocumentListener() {&#xa;            @Override&#xa;            public void insertUpdate(DocumentEvent e) {&#xa;                String text = jTextField_trova.getText();&#xa;                jTable_passwords.clearSelection();&#xa;&#xa;                if (text.trim().length() == 0) {&#xa;                    rowSorter.setRowFilter(null);&#xa;                    jButton_up.setEnabled(true);&#xa;                    jButton_down.setEnabled(true);&#xa;                } else {&#xa;                    rowSorter.setRowFilter(RowFilter.regexFilter(&quot;(?i)&quot; + text));&#xa;                    jButton_up.setEnabled(false);&#xa;                    jButton_down.setEnabled(false);&#xa;                }&#xa;            }&#xa;&#xa;            @Override&#xa;            public void removeUpdate(DocumentEvent e) {&#xa;                String text = jTextField_trova.getText();&#xa;                jTable_passwords.clearSelection();&#xa;&#xa;                if (text.trim().length() == 0) {&#xa;                    rowSorter.setRowFilter(null);                    &#xa;                    jButton_up.setEnabled(true);&#xa;                    jButton_down.setEnabled(true);&#xa;                } else {                    &#xa;                    rowSorter.setRowFilter(RowFilter.regexFilter(&quot;(?i)&quot; + text));&#xa;                    jButton_up.setEnabled(false);&#xa;                    jButton_down.setEnabled(false);&#xa;                }&#xa;            }&#xa;&#xa;            @Override&#xa;            public void changedUpdate(DocumentEvent e) {               &#xa;            }&#xa;        });">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
@@ -328,7 +328,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextField_trova">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value="Inserisci il nome della disciplina da cercare"/>
+        <Property name="toolTipText" type="java.lang.String" value="Inserisci il testo da cercare"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

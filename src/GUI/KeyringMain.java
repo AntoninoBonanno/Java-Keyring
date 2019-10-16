@@ -131,7 +131,7 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_WEBSITE);
+                    keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_WEBSITE);
                 } catch (KeyringException ex) {
                     JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
                 }
@@ -145,7 +145,7 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_EMAIL);
+                    keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_EMAIL);
                 } catch (KeyringException ex) {
                     JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
                 }
@@ -159,7 +159,7 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_USERNAME);
+                    keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_USERNAME);
                 } catch (KeyringException ex) {
                     JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
                 }
@@ -173,7 +173,7 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_PASSWORD);
+                    keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_PASSWORD);
                 } catch (KeyringException ex) {
                     JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
                 }
@@ -187,7 +187,7 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    keyring.copyToClipboard(jTable_passwords.getSelectedRow(), Row.ELEMENT_NOTE);
+                    keyring.copyToClipboard(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()), Row.ELEMENT_NOTE);
                 } catch (KeyringException ex) {
                     JOptionPane.showMessageDialog(KeyringMain.this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
                 }
@@ -236,22 +236,32 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String text = jTextField_trova.getText();
+                jTable_passwords.clearSelection();
 
                 if (text.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
+                    jButton_up.setEnabled(true);
+                    jButton_down.setEnabled(true);
                 } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    jButton_up.setEnabled(false);
+                    jButton_down.setEnabled(false);
                 }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 String text = jTextField_trova.getText();
+                jTable_passwords.clearSelection();
 
                 if (text.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
+                    jButton_up.setEnabled(true);
+                    jButton_down.setEnabled(true);
                 } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    jButton_up.setEnabled(false);
+                    jButton_down.setEnabled(false);
                 }
             }
 
@@ -307,7 +317,7 @@ public class KeyringMain extends javax.swing.JFrame {
             }
         });
 
-        jTextField_trova.setToolTipText("Inserisci il nome della disciplina da cercare");
+        jTextField_trova.setToolTipText("Inserisci il testo da cercare");
 
         jLabel2.setText("Trova:");
 
@@ -428,7 +438,7 @@ public class KeyringMain extends javax.swing.JFrame {
             return;
         }            
         try {
-            keyring.moveUpRow(jTable_passwords.getSelectedRow());
+            keyring.moveUpRow(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()));
             jTable_passwords.clearSelection();
             loadTable();
         } catch (KeyringException ex) {
@@ -443,7 +453,7 @@ public class KeyringMain extends javax.swing.JFrame {
             return;
         }
         try {
-            keyring.removeRow(jTable_passwords.getSelectedRow());
+            keyring.removeRow(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()));
             jTable_passwords.clearSelection();
             loadTable();
         } catch (KeyringException ex) {
@@ -458,7 +468,7 @@ public class KeyringMain extends javax.swing.JFrame {
             return;
         }
         try {
-            keyring.moveDownRow(jTable_passwords.getSelectedRow());
+            keyring.moveDownRow(jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()));
             jTable_passwords.clearSelection();
             loadTable();
         } catch (KeyringException ex) {
@@ -496,10 +506,11 @@ public class KeyringMain extends javax.swing.JFrame {
             jTable_passwords.clearSelection(); 
             return;
         }
-        NewRow nr = new NewRow(this, true, keyring, jTable_passwords.getSelectedRow());
+        
+        NewRow nr = new NewRow(this, true, keyring, jTable_passwords.convertRowIndexToModel(jTable_passwords.getSelectedRow()));
         nr.setLocationRelativeTo(this);        
         nr.setVisible(true);
-        
+                
         loadTable();
     }//GEN-LAST:event_jButton_editActionPerformed
 
@@ -555,7 +566,7 @@ public class KeyringMain extends javax.swing.JFrame {
      */   
     private void loadTable(){
         System.out.print("Carico la tabella...   ");   
-        DefaultTableModel table = (DefaultTableModel) jTable_passwords.getModel();
+        DefaultTableModel table = (DefaultTableModel) jTable_passwords.getModel();        
         table.setRowCount(0);
         
         keyring.getTableKeys().stream().map((r) -> {
