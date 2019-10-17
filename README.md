@@ -1,4 +1,4 @@
-# Java-Keyring
+# Simple-Java-Keyring
 Un tool semplice per memorizzare in modo sicuro le password.
 
 **Istruzioni:**
