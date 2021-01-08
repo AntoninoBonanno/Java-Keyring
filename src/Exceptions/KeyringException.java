@@ -37,6 +37,8 @@ public class KeyringException extends Exception {
         super(msg);
         this.typeMessage=typeMessage;
         this.titleMsg=titleMsg;   
+        
+        System.err.println("Errore: "+ titleMsg);
     }
     
     public String getTitleMsg() {

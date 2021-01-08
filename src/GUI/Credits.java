@@ -5,7 +5,7 @@
  */
 package GUI;
 
-import Keyring.Keyring;
+import Keyring.KeyringClass;
 import java.awt.Toolkit;
 
 /**
@@ -48,7 +48,7 @@ public class Credits extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Keyring by " + Keyring.author);
+        setTitle("Keyring.KeyringClass by " + Keyring.KeyringClass.author);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -76,9 +76,9 @@ public class Credits extends javax.swing.JDialog {
 
         jLabel7.setText("Non usare caratteri uguali consecutivi.");
 
-        jLabel_version.setText("v. "+Keyring.version);
+        jLabel_version.setText("v. "+Keyring.KeyringClass.version);
 
-        jLabel9.setText("By " + Keyring.author);
+        jLabel9.setText("By " + Keyring.KeyringClass.author);
 
         jLabel11.setText("Un tool semplice per memorizzare in modo sicuro le password.");
 

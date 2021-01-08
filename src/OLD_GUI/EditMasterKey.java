@@ -1,7 +1,8 @@
-package GUI;
+package OLD_GUI;
 
+import GUI.Credits;
 import Exceptions.KeyringException;
-import Keyring.Keyring;
+import Keyring.KeyringClass;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -25,7 +26,7 @@ public class EditMasterKey extends javax.swing.JDialog {
      * @param modal
      * @param keyring
      */
-    public EditMasterKey(java.awt.Frame parent, boolean modal, Keyring keyring) {
+    public EditMasterKey(java.awt.Frame parent, boolean modal, KeyringClass keyring) {
         super(parent, modal);
         initComponents();
         this.keyring = keyring;
@@ -48,7 +49,6 @@ public class EditMasterKey extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Modifica master Key");
-        setPreferredSize(new java.awt.Dimension(332, 165));
 
         jButton_confirm.setText("Conferma");
         jButton_confirm.addActionListener(new java.awt.event.ActionListener() {
@@ -140,7 +140,7 @@ public class EditMasterKey extends javax.swing.JDialog {
         c.setVisible(true);
     }//GEN-LAST:event_jButton_creditsActionPerformed
 
-    private final Keyring keyring;
+    private final KeyringClass keyring;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_confirm;
     private javax.swing.JButton jButton_credits;

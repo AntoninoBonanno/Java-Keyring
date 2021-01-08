@@ -2,16 +2,15 @@ package GUI;
 
 
 import Exceptions.KeyringException;
-import Keyring.Keyring;
+import Keyring.KeyringClass;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -42,17 +41,8 @@ public class Autenticate extends javax.swing.JFrame {
             }
         });
         
-        addWindowListener(new WindowAdapter()
-        {
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                System.out.println("\n<----- KEYRING ----->");
-            }
-        });
-        
         try {
-            Keyring.checkFile();
+            KeyringClass.checkFile();
         } catch (KeyringException ex) {
             JOptionPane.showMessageDialog(me, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
         }
@@ -80,6 +70,11 @@ public class Autenticate extends javax.swing.JFrame {
         setTitle("Keyring");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jButton_autenticate.setText("Accedi");
         jButton_autenticate.addActionListener(new java.awt.event.ActionListener() {
@@ -99,9 +94,9 @@ public class Autenticate extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setText("By " + Keyring.author);
+        jLabel9.setText("By " + Keyring.KeyringClass.author);
 
-        jLabel_version.setText("v. "+Keyring.version);
+        jLabel_version.setText("v. "+Keyring.KeyringClass.version);
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png"))); // NOI18N
 
@@ -170,16 +165,12 @@ public class Autenticate extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_autenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_autenticateActionPerformed
-        try {
+       
             String masterKey = String.valueOf(jPasswordField_MasterKey.getPassword());
             
-            KeyringMain k = new KeyringMain(new Keyring(masterKey));
-            k.setLocationRelativeTo(this);
-            k.setVisible(true);
+            
             this.dispose();
-        } catch (KeyringException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(),ex.getTitleMsg(),ex.getTypeMessage());
-        }
+       
     }//GEN-LAST:event_jButton_autenticateActionPerformed
 
     private void jButton_creditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_creditsActionPerformed
@@ -187,6 +178,10 @@ public class Autenticate extends javax.swing.JFrame {
         c.setLocationRelativeTo(this);
         c.setVisible(true);
     }//GEN-LAST:event_jButton_creditsActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        System.out.println("\n<----- KEYRING ----->");
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_autenticate;

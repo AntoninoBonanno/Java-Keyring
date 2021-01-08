@@ -1,6 +1,9 @@
 package Keyring;
 
-import GUI.Autenticate;
+import Exceptions.KeyringException;
+import GUI.KeyringMain;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /*
@@ -17,8 +20,8 @@ public class Main {
     public static void main(String[] args) {
         
         System.out.println("<----- KEYRING ----->");
-        System.out.println("Versione: " + Keyring.version);    
-        System.out.println("Autore: " + Keyring.author + "\n");
+        System.out.println("Versione: " + KeyringClass.version);    
+        System.out.println("Autore: " + KeyringClass.author + "\n");
          
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -27,12 +30,17 @@ public class Main {
                     break;
                 }
             }
+            
+            KeyringMain keyringMain = new KeyringMain();
+            keyringMain.setLocationRelativeTo(null);
+            keyringMain.setVisible(true);
+            keyringMain.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
-            System.out.println("Errore tema: " +ex.getMessage());
+            System.out.println("Errore tema: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore tema", JOptionPane.ERROR_MESSAGE);
+        } catch (KeyringException ex) {
+           JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
         }
-        
-        Autenticate auth = new Autenticate();
-        auth.setLocationRelativeTo(null);
-        auth.setVisible(true);
     }
 }

@@ -5,30 +5,43 @@
  */
 package GUI;
 
-import Keyring.Keyring;
-import Keyring.Row;
+import Classes.Key;
+import Classes.Page;
+import Exceptions.KeyringException;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Nino
  */
-public class NewRow extends javax.swing.JDialog {
+public class UpsertKey extends javax.swing.JDialog {
        
     /**
      * Creates new form NewRow
      * @param parent
      * @param modal
-     * @param k
-     * @param currentIndex -1 se è una nuova riga
+     * @param page Pagina dove si vuole aggiungere la key
+     * @param key Key da modificare, NULL da creare nuova
+     * @throws Exceptions.KeyringException
      */
-    public NewRow(java.awt.Frame parent, boolean modal, Keyring k, int currentIndex) {
+    public UpsertKey(java.awt.Frame parent, boolean modal, Page page, Key key) throws KeyringException {
         super(parent, modal);
         initComponents();
-        this.keyring = k;
-        this.currentIndex = currentIndex;
-        setOldRow(currentIndex);
+        
+        if(page == null && key == null) throw new KeyringException("Seleziona una pagina.", "Errore", KeyringException.INFORMATION_MESSAGE);
+        
+        this.page = page;
+        this.key = key;
+        
+        if(this.key != null){
+            jTextField_website.setText(this.key.getWebSite());
+            jTextField_username.setText(this.key.getUsername());
+            jTextField_email.setText(this.key.getEmail());
+            jTextField_password.setText(this.key.getPassword());
+            jTextArea_note.setText(this.key.getNote());
+        }
     }
 
     /**
@@ -58,21 +71,56 @@ public class NewRow extends javax.swing.JDialog {
         setTitle("Keyring - Nuova riga");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
 
+        jTextField_website.setNextFocusableComponent(jTextField_email);
+        jTextField_website.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_websiteKeyPressed(evt);
+            }
+        });
+
         jLabel1.setText("Sito web:");
 
         jLabel2.setText("Email:");
 
+        jTextField_email.setNextFocusableComponent(jTextField_username);
+        jTextField_email.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_emailKeyPressed(evt);
+            }
+        });
+
+        jTextField_username.setNextFocusableComponent(jTextField_password);
+        jTextField_username.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_usernameKeyPressed(evt);
+            }
+        });
+
         jLabel3.setText("Usermane:");
+
+        jTextField_password.setNextFocusableComponent(jTextArea_note);
+        jTextField_password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField_passwordKeyPressed(evt);
+            }
+        });
 
         jLabel4.setText("Password:");
 
         jTextArea_note.setColumns(20);
         jTextArea_note.setRows(5);
+        jTextArea_note.setNextFocusableComponent(jButton_confirm);
+        jTextArea_note.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextArea_noteKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTextArea_note);
 
         jLabel5.setText("Note:");
 
         jButton_abort.setText("Annulla");
+        jButton_abort.setNextFocusableComponent(jTextField_website);
         jButton_abort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_abortActionPerformed(evt);
@@ -80,6 +128,7 @@ public class NewRow extends javax.swing.JDialog {
         });
 
         jButton_confirm.setText("Conferma");
+        jButton_confirm.setNextFocusableComponent(jButton_abort);
         jButton_confirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_confirmActionPerformed(evt);
@@ -166,9 +215,10 @@ public class NewRow extends javax.swing.JDialog {
         String email = jTextField_email.getText();
         String password = jTextField_password.getText();
         String note = jTextArea_note.getText();
+        
         try {
-            if(currentIndex<0 || currentIndex > keyring.getTableKeys().size()) keyring.addRow(webSite, username, email, password, note);
-            else keyring.editRow(currentIndex, webSite, username, email, password, note);
+            if(this.key != null) key.edit(webSite, username, email, password, note);
+            else page.addKey(webSite, username, email, password, note);
             
             this.dispose();
         } catch (Exception ex) {
@@ -176,9 +226,28 @@ public class NewRow extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton_confirmActionPerformed
 
-    
-    private final Keyring keyring;
-    private final int currentIndex;
+    private void jTextField_websiteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_websiteKeyPressed
+        checkEnter(evt);
+    }//GEN-LAST:event_jTextField_websiteKeyPressed
+
+    private void jTextField_emailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_emailKeyPressed
+        checkEnter(evt);
+    }//GEN-LAST:event_jTextField_emailKeyPressed
+
+    private void jTextField_usernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_usernameKeyPressed
+        checkEnter(evt);
+    }//GEN-LAST:event_jTextField_usernameKeyPressed
+
+    private void jTextField_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_passwordKeyPressed
+       checkEnter(evt);
+    }//GEN-LAST:event_jTextField_passwordKeyPressed
+
+    private void jTextArea_noteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea_noteKeyPressed
+        checkEnter(evt);
+    }//GEN-LAST:event_jTextArea_noteKeyPressed
+
+    private final Page page;
+    private final Key key;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_abort;
     private javax.swing.JButton jButton_confirm;
@@ -195,18 +264,10 @@ public class NewRow extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField_website;
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * Inizializza gli input field con i vecchi valori
-     * @param currentIndex 
-     */
-    private void setOldRow(int currentIndex) {
-        if(currentIndex<0 || currentIndex > keyring.getTableKeys().size()) return;
-        Row r = keyring.getTableKeys().get(currentIndex);
-        
-        jTextField_website.setText(r.getWebSite());
-        jTextField_username.setText(r.getUsername());
-        jTextField_email.setText(r.getEmail());
-        jTextField_password.setText(r.getPassword());
-        jTextArea_note.setText(r.getNote());
+    private void checkEnter(KeyEvent evt) {
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER){
+            jButton_confirm.doClick();
+        }
     }
+
 }
