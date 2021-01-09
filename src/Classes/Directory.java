@@ -6,16 +6,19 @@
 package Classes;
 
 import Exceptions.KeyringException;
+import java.io.Serializable;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class KeyringObject {    
+public class Directory implements Serializable{      
+    private static final long serialVersionUID = 1999L;
+    
     private String name;
     private final String errorMessage;
 
-    public KeyringObject(String name, String errorMessage) throws KeyringException {
+    public Directory(String name, String errorMessage) throws KeyringException {
        this.errorMessage = errorMessage;
        edit(name);
     }
@@ -31,8 +34,7 @@ public class KeyringObject {
      */
     protected void edit(String name) throws KeyringException {
         if (name.isEmpty()){
-            System.out.println(errorMessage); 
-            throw new KeyringException(errorMessage,"Attenzione",KeyringException.INFORMATION_MESSAGE);
+            throw new KeyringException(errorMessage,KeyringException.WARNING_MESSAGE);
         }
         this.name = name;
     }

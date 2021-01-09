@@ -6,7 +6,7 @@
 package GUI.Components;
 
 import Classes.Folder;
-import Classes.KeyringObject;
+import Classes.Directory;
 import Classes.Page;
 import GUI.Classes.ActionFolderListener;
 import java.util.List;
@@ -16,7 +16,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public class JFolderTree extends JTree {
 
@@ -26,6 +26,8 @@ public class JFolderTree extends JTree {
     public JFolderTree() {
         initComponents();
         
+        DefaultTreeModel model = (DefaultTreeModel) super.getModel();        
+        model.setRoot(null);
     }
 
     @Override
@@ -34,12 +36,23 @@ public class JFolderTree extends JTree {
     }
        
     public void setRootFolder(Folder rootFolder){
-        System.out.print("Carico la root folder...   ");   
+        System.out.print("Carico la root folder...   ");  
         
-        DefaultMutableTreeNode rootNode = getRootNode();        
-        loadFolder(rootNode, rootFolder);
-                
+        DefaultTreeModel model = getModel();        
+        model.setRoot(null);
+            
+        if(rootFolder != null){        
+            DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(rootFolder);
+            loadFolder(rootNode, rootFolder);
+            model.setRoot(rootNode);
+        }
+        
         System.out.println("Completato.");
+    }
+           
+    public Page getSelectedPage(){
+        Directory selectedElement = getSelectedElement();
+        return (selectedElement instanceof Page) ? ((Page) selectedElement) : null;
     }
     
     /**
@@ -49,12 +62,27 @@ public class JFolderTree extends JTree {
     public void addActionFolderListener(ActionFolderListener listener) {
         actionFolderListeners.add(listener);
     }
-        
-    public Page getSelectedPage(){
-        KeyringObject selectedElement = getSelectedElement();
-        return (selectedElement instanceof Page) ? ((Page) selectedElement) : null;
-    }
      
+    public void fireAddFolder(){
+        Directory selected = getSelectedElement();
+        Folder parent = getSelectedParentElement();
+        
+        actionFolderListeners.forEach((afl) -> {
+            afl.addFolderAction(parent, selected);
+        });
+        reloadSelectedElement();
+    }
+    
+    public void fireAddPage(){
+        Directory selected = getSelectedElement();
+        Folder parent = getSelectedParentElement();
+        
+        actionFolderListeners.forEach((afl) -> {
+            afl.addPageAction(parent, selected);
+        });
+        reloadSelectedElement();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,26 +93,26 @@ public class JFolderTree extends JTree {
     private void initComponents() {
 
         jPopupMenuFolderTree = new javax.swing.JPopupMenu();
-        jMenuItemAddPage = new javax.swing.JMenuItem();
         jMenuItemAddFolder = new javax.swing.JMenuItem();
+        jMenuItemAddPage = new javax.swing.JMenuItem();
         jMenuItemEdit = new javax.swing.JMenuItem();
         jMenuItemDelete = new javax.swing.JMenuItem();
 
-        jMenuItemAddPage.setText("Pagina");
-        jMenuItemAddPage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAddPageActionPerformed(evt);
-            }
-        });
-        jPopupMenuFolderTree.add(jMenuItemAddPage);
-
-        jMenuItemAddFolder.setText("Cartella");
+        jMenuItemAddFolder.setText("Nuova cartella");
         jMenuItemAddFolder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemAddFolderActionPerformed(evt);
             }
         });
         jPopupMenuFolderTree.add(jMenuItemAddFolder);
+
+        jMenuItemAddPage.setText("Nuova pagina");
+        jMenuItemAddPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAddPageActionPerformed(evt);
+            }
+        });
+        jPopupMenuFolderTree.add(jMenuItemAddPage);
 
         jMenuItemEdit.setText("Modifica");
         jMenuItemEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -102,9 +130,14 @@ public class JFolderTree extends JTree {
         });
         jPopupMenuFolderTree.add(jMenuItemDelete);
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Root");
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         setComponentPopupMenu(jPopupMenuFolderTree);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
         addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 formValueChanged(evt);
@@ -133,17 +166,11 @@ public class JFolderTree extends JTree {
     }//GEN-LAST:event_formTreeWillExpand
 
     private void jMenuItemAddFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddFolderActionPerformed
-        KeyringObject selected = getSelectedElement();
-        Folder parent = getSelectedParentElement();
-        
-        actionFolderListeners.forEach((afl) -> {
-            afl.addFolderAction(parent, selected);
-        });
-        reloadSelectedElement();
+        fireAddFolder();
     }//GEN-LAST:event_jMenuItemAddFolderActionPerformed
 
     private void jMenuItemEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEditActionPerformed
-        KeyringObject selected = getSelectedElement();
+        Directory selected = getSelectedElement();
         if(selected instanceof Folder){
             actionFolderListeners.forEach((afl) -> {
                 afl.editFolderAction((Folder) selected);
@@ -157,17 +184,11 @@ public class JFolderTree extends JTree {
     }//GEN-LAST:event_jMenuItemEditActionPerformed
 
     private void jMenuItemAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddPageActionPerformed
-        KeyringObject selected = getSelectedElement();
-        Folder parent = getSelectedParentElement();
-        
-        actionFolderListeners.forEach((afl) -> {
-            afl.addPageAction(parent, selected);
-        });
-        reloadSelectedElement();
+        fireAddPage();
     }//GEN-LAST:event_jMenuItemAddPageActionPerformed
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        KeyringObject selected = getSelectedElement();
+        Directory selected = getSelectedElement();
         Folder parent = getSelectedParentElement();
         if(parent == null) return;
         
@@ -187,6 +208,12 @@ public class JFolderTree extends JTree {
         DefaultMutableTreeNode selectedNode = getSelectedNode();
         jMenuItemDelete.setEnabled(!selectedNode.isRoot());
     }//GEN-LAST:event_formValueChanged
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if (evt.getClickCount() == 2) {
+            jMenuItemEditActionPerformed(null);
+        }
+    }//GEN-LAST:event_formMouseClicked
 
 
     private final List<ActionFolderListener> actionFolderListeners = new ArrayList<>();
@@ -226,9 +253,9 @@ public class JFolderTree extends JTree {
         return (node == null) ? getRootNode() : node;
     }
     
-    private KeyringObject getSelectedElement(){
+    private Directory getSelectedElement(){
         DefaultMutableTreeNode node = getSelectedNode();
-        return (KeyringObject) node.getUserObject();
+        return (Directory) node.getUserObject();
     }
     
     private DefaultMutableTreeNode getSelectedParentNode(){

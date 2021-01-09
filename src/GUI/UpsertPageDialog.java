@@ -7,16 +7,16 @@ package GUI;
 
 import Exceptions.KeyringException;
 import Classes.Folder;
-import Classes.KeyringObject;
+import Classes.Directory;
 import Classes.Page;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class UpsertPage extends javax.swing.JDialog {
+public class UpsertPageDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form UpsertPage
@@ -26,7 +26,7 @@ public class UpsertPage extends javax.swing.JDialog {
      * @param kObj Oggetto dove si vuole aggiungere la pagina, se <code>parentFolder</code> è NULL && <code>kObj</code> è una pagina, <code>kObj</code> viene modificato
      * @throws Exceptions.KeyringException
      */
-    public UpsertPage(java.awt.Frame parent, boolean modal, Folder parentFolder, KeyringObject kObj) throws KeyringException {
+    public UpsertPageDialog(java.awt.Frame parent, boolean modal, Folder parentFolder, Directory kObj) throws KeyringException {
         super(parent, modal);
         initComponents();
         
@@ -179,7 +179,7 @@ public class UpsertPage extends javax.swing.JDialog {
 
     
     private final Folder parentFolder;
-    private final KeyringObject kObj;
+    private final Directory kObj;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_abort;
     private javax.swing.JButton jButton_confirm;

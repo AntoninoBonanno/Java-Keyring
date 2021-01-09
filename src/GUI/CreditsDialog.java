@@ -5,21 +5,21 @@
  */
 package GUI;
 
-import Keyring.KeyringClass;
+import Classes.AppSettings;
 import java.awt.Toolkit;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class Credits extends javax.swing.JDialog {
+public class CreditsDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form Credits
      * @param parent
      * @param modal
      */
-    public Credits(java.awt.Frame parent, boolean modal) {
+    public CreditsDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -48,7 +48,7 @@ public class Credits extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Keyring.KeyringClass by " + Keyring.KeyringClass.author);
+        setTitle("Credits");
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/logo1.png")));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -76,11 +76,11 @@ public class Credits extends javax.swing.JDialog {
 
         jLabel7.setText("Non usare caratteri uguali consecutivi.");
 
-        jLabel_version.setText("v. "+Keyring.KeyringClass.version);
+        jLabel_version.setText("v. "+AppSettings.version);
 
-        jLabel9.setText("By " + Keyring.KeyringClass.author);
+        jLabel9.setText("Di " + AppSettings.author);
 
-        jLabel11.setText("Un tool semplice per memorizzare in modo sicuro le password.");
+        jLabel11.setText("Un tool semplice e sicuro per memorizzare in modo sicuro le tue password.");
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/logo.png"))); // NOI18N
 

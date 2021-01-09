@@ -7,7 +7,7 @@ package GUI.Components;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public class Toast extends javax.swing.JFrame {
 

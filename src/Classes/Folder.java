@@ -13,9 +13,9 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public final class Folder extends KeyringObject implements Serializable, Comparable<Folder>{    
+public final class Folder extends Directory implements Serializable, Comparable<Folder>{    
     private static final long serialVersionUID = 1998L;
     
     private final LinkedList<Page> pages;
@@ -195,6 +195,4 @@ public final class Folder extends KeyringObject implements Serializable, Compara
     public int compareTo(Folder o) {
         return Collator.getInstance().compare(getName(), o.getName());
     }
-
-    
 }

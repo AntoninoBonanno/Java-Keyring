@@ -70,6 +70,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Elimina"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemDeleteKeyActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>
@@ -81,6 +84,7 @@
     <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
       <ComponentRef name="jPopupMenuKeyTable"/>
     </Property>
+    <Property name="dragEnabled" type="boolean" value="true"/>
     <Property name="rowSorter" type="javax.swing.RowSorter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new TableRowSorter&lt;&gt;(getModel())" type="code"/>
     </Property>
@@ -92,6 +96,9 @@
       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
     </Property>
   </Properties>
+  <Events>
+    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="formMouseClicked"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>

@@ -7,16 +7,16 @@ package GUI;
 
 import Exceptions.KeyringException;
 import Classes.Folder;
-import Classes.KeyringObject;
+import Classes.Directory;
 import Classes.Page;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class UpsertFolder extends javax.swing.JDialog {
+public class UpsertFolderDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form UpsertFolder
@@ -26,7 +26,7 @@ public class UpsertFolder extends javax.swing.JDialog {
      * @param kObj Oggetto dove si vuole aggiungere la cartella, NULL se si vuole modificare <code>parentFolder</code>
      * @throws Exceptions.KeyringException Se <code>parentFolder && kObj</code> sono NULL
      */
-    public UpsertFolder(java.awt.Frame parent, boolean modal, Folder parentFolder, KeyringObject kObj) throws KeyringException {
+    public UpsertFolderDialog(java.awt.Frame parent, boolean modal, Folder parentFolder, Directory kObj) throws KeyringException {
         super(parent, modal);
         initComponents();
            
@@ -150,7 +150,7 @@ public class UpsertFolder extends javax.swing.JDialog {
 
     
     private final Folder parentFolder;
-    private final KeyringObject kObj;
+    private final Directory kObj;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_abort;
     private javax.swing.JButton jButton_confirm;

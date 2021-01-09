@@ -1,18 +1,22 @@
 package GUI;
 
 
-import OLD_GUI.EditMasterKey;
+import Classes.AppSettings;
 import Exceptions.KeyringException;
 import Classes.Folder;
 import Classes.Key;
-import Classes.KeyringObject;
-import Keyring.KeyringClass;
+import Classes.Directory;
+import Classes.Keyring;
 import Classes.Page;
 import GUI.Classes.ActionFolderListener;
 import GUI.Classes.ActionKeyListener;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
+import javax.swing.UnsupportedLookAndFeelException;
+import GUI.Classes.ActionDialogListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,19 +26,21 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public class KeyringMain extends javax.swing.JFrame {
     
     /**
      * Creates new form KeyringMain
-     * @param keyring
      */
-    public KeyringMain() throws KeyringException {
-        this.keyring = new KeyringClass("ciao");
+    public KeyringMain() {
         initComponents();
         initFolderTree(); 
         initKeyTable();
+        
+        if(AppSettings.issetOnloadFile()){
+            jMenuItemOpenKeyringActionPerformed(null);
+        }
     }
 
     /**
@@ -49,19 +55,28 @@ public class KeyringMain extends javax.swing.JFrame {
         jLabelLogo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jFolderTree = new GUI.Components.JFolderTree();
-        jButton_AddKey = new javax.swing.JButton();
-        jCheckBox_ShowPassword = new javax.swing.JCheckBox();
+        jButtonAddKey = new javax.swing.JButton();
+        jCheckBoxShowPassword = new javax.swing.JCheckBox();
         jScrollPane3 = new javax.swing.JScrollPane();
         jKeyTable = new GUI.Components.JKeyTable();
-        jTextField_FindKey = new javax.swing.JTextField();
+        jTextFieldFindKey = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem_NewKeyring = new javax.swing.JMenuItem();
-        jMenuItem_EditMasterKey = new javax.swing.JMenuItem();
-        jMenuItem_Exit = new javax.swing.JMenuItem();
-        jMenu_credits = new javax.swing.JMenu();
-        jMenuItem_credits = new javax.swing.JMenuItem();
+        jButton_up = new javax.swing.JButton();
+        jButton_down = new javax.swing.JButton();
+        jMenuBar = new javax.swing.JMenuBar();
+        jMenuFile = new javax.swing.JMenu();
+        jMenuItemOpenKeyring = new javax.swing.JMenuItem();
+        jMenuItemNewKeyring = new javax.swing.JMenuItem();
+        jMenuItemSaveKeyring = new javax.swing.JMenuItem();
+        jMenuItemExit = new javax.swing.JMenuItem();
+        jMenuEdit = new javax.swing.JMenu();
+        jMenuItemEditMasterKey = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemAddFolder = new javax.swing.JMenuItem();
+        jMenuItemAddPage = new javax.swing.JMenuItem();
+        jMenuItemAddPassword = new javax.swing.JMenuItem();
+        jMenuCredits = new javax.swing.JMenu();
+        jMenuItemCredits = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Keyring");
@@ -81,72 +96,146 @@ public class KeyringMain extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jFolderTree);
 
-        jButton_AddKey.setText("Aggiungi");
-        jButton_AddKey.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAddKey.setText("Aggiungi nuova password");
+        jButtonAddKey.setToolTipText("Verrà aggiunta una password nella pagina selezionata");
+        jButtonAddKey.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_AddKeyActionPerformed(evt);
+                jButtonAddKeyActionPerformed(evt);
             }
         });
 
-        jCheckBox_ShowPassword.setText("Mostra password");
-        jCheckBox_ShowPassword.addActionListener(new java.awt.event.ActionListener() {
+        jCheckBoxShowPassword.setText("Mostra password");
+        jCheckBoxShowPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox_ShowPasswordActionPerformed(evt);
+                jCheckBoxShowPasswordActionPerformed(evt);
             }
         });
 
         jScrollPane3.setViewportView(jKeyTable);
 
-        jTextField_FindKey.setToolTipText("Inserisci il testo da cercare");
-        jTextField_FindKey.addKeyListener(new java.awt.event.KeyAdapter() {
+        jTextFieldFindKey.setToolTipText("Inserisci il testo da cercare");
+        jTextFieldFindKey.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField_FindKeyKeyReleased(evt);
+                jTextFieldFindKeyKeyReleased(evt);
             }
         });
 
         jLabel2.setText("Trova:");
 
-        jMenu1.setText("File");
-
-        jMenuItem_NewKeyring.setText("Nuovo keyring");
-        jMenuItem_NewKeyring.addActionListener(new java.awt.event.ActionListener() {
+        jButton_up.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/su.png"))); // NOI18N
+        jButton_up.setToolTipText("Sposta la riga selezionata in alto");
+        jButton_up.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_NewKeyringActionPerformed(evt);
+                jButton_upActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_NewKeyring);
 
-        jMenuItem_EditMasterKey.setText("Modifica master Key");
-        jMenuItem_EditMasterKey.addActionListener(new java.awt.event.ActionListener() {
+        jButton_down.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/giù.png"))); // NOI18N
+        jButton_down.setToolTipText("Sposta la riga selezionata in basso");
+        jButton_down.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_EditMasterKeyActionPerformed(evt);
+                jButton_downActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_EditMasterKey);
 
-        jMenuItem_Exit.setText("Esci");
-        jMenuItem_Exit.addActionListener(new java.awt.event.ActionListener() {
+        jMenuFile.setText("File");
+
+        jMenuItemOpenKeyring.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemOpenKeyring.setText("Apri");
+        jMenuItemOpenKeyring.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_ExitActionPerformed(evt);
+                jMenuItemOpenKeyringActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem_Exit);
+        jMenuFile.add(jMenuItemOpenKeyring);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu_credits.setText("?");
-
-        jMenuItem_credits.setText("Credits");
-        jMenuItem_credits.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemNewKeyring.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemNewKeyring.setText("Nuovo");
+        jMenuItemNewKeyring.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem_creditsActionPerformed(evt);
+                jMenuItemNewKeyringActionPerformed(evt);
             }
         });
-        jMenu_credits.add(jMenuItem_credits);
+        jMenuFile.add(jMenuItemNewKeyring);
 
-        jMenuBar1.add(jMenu_credits);
+        jMenuItemSaveKeyring.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemSaveKeyring.setText("Salva");
+        jMenuItemSaveKeyring.setEnabled(false);
+        jMenuItemSaveKeyring.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveKeyringActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItemSaveKeyring);
 
-        setJMenuBar(jMenuBar1);
+        jMenuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemExit.setText("Esci");
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItemExit);
+
+        jMenuBar.add(jMenuFile);
+
+        jMenuEdit.setText("Modifica");
+        jMenuEdit.setEnabled(false);
+
+        jMenuItemEditMasterKey.setText("Master Key");
+        jMenuItemEditMasterKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEditMasterKeyActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemEditMasterKey);
+        jMenuEdit.add(jSeparator1);
+
+        jMenuItemAddFolder.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAddFolder.setText("Aggiungi cartella");
+        jMenuItemAddFolder.setToolTipText("Verrà aggiunta una cartela nell'elemento selezionato");
+        jMenuItemAddFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAddFolderActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemAddFolder);
+
+        jMenuItemAddPage.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAddPage.setText("Aggiungi pagina");
+        jMenuItemAddPage.setToolTipText("Verrà aggiunta una pagina nell'elemento selezionato");
+        jMenuItemAddPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAddPageActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemAddPage);
+
+        jMenuItemAddPassword.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_K, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItemAddPassword.setText("Aggiungi password");
+        jMenuItemAddPassword.setToolTipText("Verrà aggiunta una password nella pagina selezionata");
+        jMenuItemAddPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAddPasswordActionPerformed(evt);
+            }
+        });
+        jMenuEdit.add(jMenuItemAddPassword);
+
+        jMenuBar.add(jMenuEdit);
+
+        jMenuCredits.setText("?");
+
+        jMenuItemCredits.setText("Credits");
+        jMenuItemCredits.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCreditsActionPerformed(evt);
+            }
+        });
+        jMenuCredits.add(jMenuItemCredits);
+
+        jMenuBar.add(jMenuCredits);
+
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,11 +253,15 @@ public class KeyringMain extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField_FindKey, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldFindKey, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jCheckBox_ShowPassword)
+                        .addComponent(jCheckBoxShowPassword)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton_AddKey)))
+                        .addComponent(jButton_up, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_down, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonAddKey)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -178,7 +271,7 @@ public class KeyringMain extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField_FindKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldFindKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,38 +279,17 @@ public class KeyringMain extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton_AddKey)
-                            .addComponent(jCheckBox_ShowPassword))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButtonAddKey)
+                                .addComponent(jCheckBoxShowPassword))
+                            .addComponent(jButton_up, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton_down, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItem_NewKeyringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_NewKeyringActionPerformed
-        NewKeyring_JDialog newKeyringDialog = new NewKeyring_JDialog(this, true);
-        newKeyringDialog.setLocationRelativeTo(this);
-        newKeyringDialog.setVisible(true);
-    }//GEN-LAST:event_jMenuItem_NewKeyringActionPerformed
-
-
-
-    private void jMenuItem_EditMasterKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_EditMasterKeyActionPerformed
-        EditMasterKey e = new EditMasterKey(this, true, keyring);
-        e.setLocationRelativeTo(this);
-        e.setVisible(true);        
-    }//GEN-LAST:event_jMenuItem_EditMasterKeyActionPerformed
-
-    private void jMenuItem_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ExitActionPerformed
-        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-    }//GEN-LAST:event_jMenuItem_ExitActionPerformed
-
-    private void jMenuItem_creditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_creditsActionPerformed
-        Credits c = new Credits(this, true);
-        c.setLocationRelativeTo(this);
-        c.setVisible(true);
-    }//GEN-LAST:event_jMenuItem_creditsActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         int result = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler uscire?",
@@ -227,70 +299,191 @@ public class KeyringMain extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_formWindowClosing
 
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
+
+    private void jMenuItemOpenKeyringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenKeyringActionPerformed
+       OpenKeyringDialog openKeyringDialog = new OpenKeyringDialog(this, true, new ActionDialogListener() {
+            @Override
+            public void onConfirmAction(Keyring keyring) {
+                setKeyring(keyring);
+            }
+        });
+        
+        openKeyringDialog.setLocationRelativeTo(this);
+        openKeyringDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItemOpenKeyringActionPerformed
+    
+    private void jMenuItemNewKeyringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewKeyringActionPerformed
+        NewKeyringDialog newKeyringDialog = new NewKeyringDialog(this, true, new ActionDialogListener() {
+            @Override
+            public void onConfirmAction(Keyring keyring) {
+                setKeyring(keyring);
+            }
+        });
+        
+        newKeyringDialog.setLocationRelativeTo(this);
+        newKeyringDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItemNewKeyringActionPerformed
+
+    private void jMenuItemSaveKeyringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveKeyringActionPerformed
+        if(keyring == null) return;
+        try {
+            keyring.save();
+        } catch (KeyringException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ex.getTitle(), ex.getMessageType());
+        }
+    }//GEN-LAST:event_jMenuItemSaveKeyringActionPerformed
+
+    private void jMenuItemEditMasterKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEditMasterKeyActionPerformed
+        EditMasterKeyDialog editMasterKeyDialog = new EditMasterKeyDialog(this, true, keyring);
+        editMasterKeyDialog.setLocationRelativeTo(this);
+        editMasterKeyDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItemEditMasterKeyActionPerformed
+
+    private void jMenuItemCreditsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCreditsActionPerformed
+        CreditsDialog c = new CreditsDialog(this, true);
+        c.setLocationRelativeTo(this);
+        c.setVisible(true);
+    }//GEN-LAST:event_jMenuItemCreditsActionPerformed
+
     private void jFolderTreeValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jFolderTreeValueChanged
         Page page = jFolderTree.getSelectedPage();
+        jCheckBoxShowPassword.setSelected(false);
+        jKeyTable.showPassword(false);
         jKeyTable.loadTable(page);
     }//GEN-LAST:event_jFolderTreeValueChanged
 
-    private void jButton_AddKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddKeyActionPerformed
+    private void jButtonAddKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddKeyActionPerformed
         jKeyTable.fireAddKeyAction();
-    }//GEN-LAST:event_jButton_AddKeyActionPerformed
+    }//GEN-LAST:event_jButtonAddKeyActionPerformed
 
-    private void jCheckBox_ShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_ShowPasswordActionPerformed
-        jKeyTable.showPassword(jCheckBox_ShowPassword.isSelected());
-    }//GEN-LAST:event_jCheckBox_ShowPasswordActionPerformed
+    private void jCheckBoxShowPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxShowPasswordActionPerformed
+        jKeyTable.showPassword(jCheckBoxShowPassword.isSelected());
+    }//GEN-LAST:event_jCheckBoxShowPasswordActionPerformed
 
-    private void jTextField_FindKeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_FindKeyKeyReleased
-        jKeyTable.filter(jTextField_FindKey.getText());
-    }//GEN-LAST:event_jTextField_FindKeyKeyReleased
+    private void jTextFieldFindKeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldFindKeyKeyReleased
+        jKeyTable.filter(jTextFieldFindKey.getText());
+    }//GEN-LAST:event_jTextFieldFindKeyKeyReleased
+
+    private void jMenuItemAddPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddPasswordActionPerformed
+        jKeyTable.fireAddKeyAction();
+    }//GEN-LAST:event_jMenuItemAddPasswordActionPerformed
+
+    private void jMenuItemAddFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddFolderActionPerformed
+        jFolderTree.fireAddFolder();
+    }//GEN-LAST:event_jMenuItemAddFolderActionPerformed
+
+    private void jMenuItemAddPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddPageActionPerformed
+        jFolderTree.fireAddPage();
+    }//GEN-LAST:event_jMenuItemAddPageActionPerformed
+
+    private void jButton_upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_upActionPerformed
+        try {
+            jKeyTable.moveUpRow();
+        } catch (KeyringException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ex.getTitle(), ex.getMessageType());
+        }
+    }//GEN-LAST:event_jButton_upActionPerformed
+
+    private void jButton_downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_downActionPerformed
+        try {
+            jKeyTable.moveDownRow();
+        } catch (KeyringException ex) {
+           JOptionPane.showMessageDialog(this, ex.getMessage(), ex.getTitle(), ex.getMessageType());
+        }
+    }//GEN-LAST:event_jButton_downActionPerformed
 
     
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        
+        System.out.println("<----- KEYRING ----->");
+        System.out.println("Versione: " + AppSettings.version);    
+        System.out.println("Autore: " + AppSettings.author + "\n");
+        
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
+            System.err.println("Errore tema: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Errore tema", JOptionPane.ERROR_MESSAGE);
+        } 
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new KeyringMain().setVisible(true);
+            }
+        });
+    }
     
-    private final KeyringClass keyring;
+    private Keyring keyring;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_AddKey;
-    private javax.swing.JCheckBox jCheckBox_ShowPassword;
+    private javax.swing.JButton jButtonAddKey;
+    private javax.swing.JButton jButton_down;
+    private javax.swing.JButton jButton_up;
+    private javax.swing.JCheckBox jCheckBoxShowPassword;
     private GUI.Components.JFolderTree jFolderTree;
     private GUI.Components.JKeyTable jKeyTable;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelLogo;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem_EditMasterKey;
-    private javax.swing.JMenuItem jMenuItem_Exit;
-    private javax.swing.JMenuItem jMenuItem_NewKeyring;
-    private javax.swing.JMenuItem jMenuItem_credits;
-    private javax.swing.JMenu jMenu_credits;
+    private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenu jMenuCredits;
+    private javax.swing.JMenu jMenuEdit;
+    private javax.swing.JMenu jMenuFile;
+    private javax.swing.JMenuItem jMenuItemAddFolder;
+    private javax.swing.JMenuItem jMenuItemAddPage;
+    private javax.swing.JMenuItem jMenuItemAddPassword;
+    private javax.swing.JMenuItem jMenuItemCredits;
+    private javax.swing.JMenuItem jMenuItemEditMasterKey;
+    private javax.swing.JMenuItem jMenuItemExit;
+    private javax.swing.JMenuItem jMenuItemNewKeyring;
+    private javax.swing.JMenuItem jMenuItemOpenKeyring;
+    private javax.swing.JMenuItem jMenuItemSaveKeyring;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField_FindKey;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JTextField jTextFieldFindKey;
     // End of variables declaration//GEN-END:variables
 
     private void initFolderTree() {        
-        KeyringMain self = this;
-        
-        jFolderTree.setRootFolder(this.keyring.getRootFolder());        
+        KeyringMain self = this;                
         jFolderTree.addActionFolderListener(new ActionFolderListener() {
             @Override
-            public void addFolderAction(Folder parentFolder, KeyringObject currentObject) {
+            public void addFolderAction(Folder parentFolder, Directory currentObject) {
                 try {
-                    UpsertFolder uF = new UpsertFolder(self, true, parentFolder, currentObject);
+                    UpsertFolderDialog uF = new UpsertFolderDialog(self, true, parentFolder, currentObject);
                     uF.setLocationRelativeTo(self);        
                     uF.setVisible(true);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
 
             @Override
             public void editFolderAction(Folder folder) {
                 try {
-                    UpsertFolder uF = new UpsertFolder(self, true, folder, null);
+                    UpsertFolderDialog uF = new UpsertFolderDialog(self, true, folder, null);
                     uF.setLocationRelativeTo(self);        
                     uF.setVisible(true);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
-                    System.err.println("Errore: "+ ex.getMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
 
@@ -303,44 +496,42 @@ public class KeyringMain extends javax.swing.JFrame {
                 try {
                     parentFolder.removeSubfolder(folder);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
-                    System.err.println("Errore: "+ ex.getMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
 
             @Override
-            public void addPageAction(Folder parentFolder, KeyringObject currentObject) {
+            public void addPageAction(Folder parentFolder, Directory currentObject) {
                 try {
-                    UpsertPage uP = new UpsertPage(self, true, parentFolder, currentObject);
+                    UpsertPageDialog uP = new UpsertPageDialog(self, true, parentFolder, currentObject);
                     uP.setLocationRelativeTo(self);        
                     uP.setVisible(true);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
-                    System.err.println("Errore: "+ ex.getMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
 
             @Override
             public void editPageAction(Page page) {
                 try {
-                    UpsertPage uP = new UpsertPage(self, true, null, page);
+                    UpsertPageDialog uP = new UpsertPageDialog(self, true, null, page);
                     uP.setLocationRelativeTo(self);        
                     uP.setVisible(true);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
 
             @Override
             public void deletePageAction(Folder parentFolder, Page page) {
                 int result = JOptionPane.showConfirmDialog(self, "Sei sicuro di voler eliminare la pagina "+page.getName()+"?",
-                        "Conferma uscita", JOptionPane.YES_NO_CANCEL_OPTION);
+                        "Conferma eliminazione", JOptionPane.YES_NO_CANCEL_OPTION);
                 if(result != JOptionPane.YES_OPTION) return;
                 
                 try {
                     parentFolder.removePage(page);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
         });
@@ -353,25 +544,37 @@ public class KeyringMain extends javax.swing.JFrame {
             @Override
             public void onAddKeyAction(Page page) {
                 try {
-                    UpsertKey uk = new UpsertKey(self, true, page, null);
+                    UpsertKeyDialog uk = new UpsertKeyDialog(self, true, page, null);
                     uk.setLocationRelativeTo(self);        
                     uk.setVisible(true);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
 
             @Override
             public void onEditKeyAction(Key key) {
                 try {
-                    UpsertKey uk = new UpsertKey(self, true, null, key);
+                    UpsertKeyDialog uk = new UpsertKeyDialog(self, true, null, key);
                     uk.setLocationRelativeTo(self);        
                     uk.setVisible(true);
                 } catch (KeyringException ex) {
-                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitleMsg(), ex.getTypeMessage());
+                    JOptionPane.showMessageDialog(self, ex.getMessage(), ex.getTitle(), ex.getMessageType());
                 }
             }
         });
+    }
+
+    private void setKeyring(Keyring keyring) {
+        this.keyring = keyring;
+        jCheckBoxShowPassword.setSelected(false);
+        
+        jTextFieldFindKey.setText("");
+        jMenuItemSaveKeyring.setEnabled(true);
+        jMenuEdit.setEnabled(true);
+        
+        jKeyTable.loadTable(null);
+        jFolderTree.setRootFolder(this.keyring.getRootFolder());        
     }
    
 }

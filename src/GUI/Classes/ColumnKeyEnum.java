@@ -8,7 +8,7 @@ package GUI.Classes;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public enum ColumnKeyEnum {    
     WEB_SITE(0),

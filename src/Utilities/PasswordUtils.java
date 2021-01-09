@@ -6,28 +6,20 @@
 package Utilities;
 
 import Exceptions.KeyringException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import static org.passay.IllegalCharacterRule.ERROR_CODE;
+import org.passay.PasswordGenerator;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class PasswordUtils {
-    
-    private String masterKey;
-
-    public PasswordUtils(String masterKey) {
-        this.masterKey = masterKey;
-    }
-
-    public String getMasterKey() {
-        return masterKey;
-    }
-
-    public void setMasterKey(String masterKey) {
-        this.masterKey = masterKey;
-    }    
-        
+public final class PasswordUtils {
+     
     /**
      * Verifica il formato della password inserita
      * Deve contenere almeno: un carattere Maiuscolo, un carattere minuscolo, 
@@ -48,16 +40,45 @@ public class PasswordUtils {
         }
         System.out.println("Password non sicura!");
         throw new KeyringException(
-            "Password inserita: " + password +
-            "\n\nLa tua password deve contenere almeno:  \n\n"+
+            "La tua password deve contenere almeno:  \n\n"+
             " - un carattere Maiuscolo\n - un carattere minuscolo\n - un carattere numerico\n - un carattere speciale\n - più di 10 caratteri\n\n" +
-            "Non deve contenere caratteri uguali consecutivi. \n\n",
-            "Attenzione",
-            KeyringException.INFORMATION_MESSAGE
+            "Non deve contenere caratteri uguali consecutivi.",
+            KeyringException.WARNING_MESSAGE
         );
     }
 
     public static String generatePassword(){
-        return "";
+        PasswordGenerator gen = new PasswordGenerator();
+        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+        lowerCaseRule.setNumberOfCharacters(2);
+
+        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
+        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
+        upperCaseRule.setNumberOfCharacters(2);
+
+        CharacterData digitChars = EnglishCharacterData.Digit;
+        CharacterRule digitRule = new CharacterRule(digitChars);
+        digitRule.setNumberOfCharacters(5);
+
+        CharacterData specialChars = new CharacterData() {
+            @Override
+            public String getErrorCode() {
+                return ERROR_CODE;
+            }
+
+            @Override
+            public String getCharacters() {
+                return "!@#$%^&*()_+";
+            }
+        };
+        CharacterRule splCharRule = new CharacterRule(specialChars);
+        splCharRule.setNumberOfCharacters(2);
+
+        int lenght = ThreadLocalRandom.current().nextInt(10, 20 + 1);
+        String password = gen.generatePassword(lenght, splCharRule, lowerCaseRule, 
+          upperCaseRule, digitRule);
+        
+        return password;
     }
 }

@@ -5,15 +5,17 @@
  */
 package GUI.Classes;
 
-import Classes.Key;
-import Classes.Page;
+import Classes.Keyring;
 
 /**
  *
  * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public interface ActionKeyListener {
-    
-    void onAddKeyAction(Page page);
-    void onEditKeyAction(Key key);
+public interface ActionDialogListener {
+
+    /**
+     *
+     * @param keyring
+     */
+    void onConfirmAction(Keyring keyring);
 }

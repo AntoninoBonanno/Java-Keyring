@@ -6,10 +6,11 @@
 package GUI.Components;
 
 import Utilities.PasswordUtils;
+import java.awt.event.KeyListener;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public class JKeyPanel extends javax.swing.JPanel {
 
@@ -17,9 +18,21 @@ public class JKeyPanel extends javax.swing.JPanel {
      * Creates new form JPasswordPannel
      */
     public JKeyPanel() {
-        initComponents();
+        this(true);
     }
-
+    
+    /**
+     * Creates new form JPasswordPannel
+     * 
+     * @param showGenerate se si vuole mostrare il pulsante di generazione
+     */
+    public JKeyPanel(boolean showGenerate) {        
+        initComponents();
+        
+        this.defaultEchoChar = jPasswordField.getEchoChar();
+        jButtonGenerate.setVisible(showGenerate);
+    }
+    
     /**
      * Creates new form JPasswordPannel
      * @param nameField
@@ -27,12 +40,17 @@ public class JKeyPanel extends javax.swing.JPanel {
     public JKeyPanel(String nameField) {
         this();
         
-        jLabel1.setText(nameField);
-        jPasswordField.setToolTipText(nameField);
+        jLabelTitle.setText(nameField);  
+        jPasswordField.setToolTipText(nameField+":");
+        jLabelInsert.setText("Inserisci la " + nameField.toLowerCase());        
     }
     
     public String getPassword(){
         return String.valueOf(jPasswordField.getPassword());
+    }
+    
+    public void setPassword(String password){
+        jPasswordField.setText(password);
     }
     
     /**
@@ -45,77 +63,105 @@ public class JKeyPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPasswordField = new javax.swing.JPasswordField();
-        jCheckBox_showPass = new javax.swing.JCheckBox();
-        jButton_Generate = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        jCheckBoxShowPass = new javax.swing.JCheckBox();
+        jButtonGenerate = new javax.swing.JButton();
+        jLabelTitle = new javax.swing.JLabel();
+        jLabelInsert = new javax.swing.JLabel();
+
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
 
         jPasswordField.setToolTipText("Master Key");
+        jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPasswordFieldKeyPressed(evt);
+            }
+        });
 
-        jCheckBox_showPass.setText("Mostra");
-        jCheckBox_showPass.addChangeListener(new javax.swing.event.ChangeListener() {
+        jCheckBoxShowPass.setText("Mostra");
+        jCheckBoxShowPass.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox_showPassStateChanged(evt);
+                jCheckBoxShowPassStateChanged(evt);
             }
         });
 
-        jButton_Generate.setText("Genera");
-        jButton_Generate.setToolTipText("");
-        jButton_Generate.addActionListener(new java.awt.event.ActionListener() {
+        jButtonGenerate.setText("Genera");
+        jButtonGenerate.setToolTipText("");
+        jButtonGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_GenerateActionPerformed(evt);
+                jButtonGenerateActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Master Key:");
+        jLabelTitle.setText("Master Key:");
+
+        jLabelInsert.setText("Inserisci la master key");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(jLabelTitle)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelInsert)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCheckBoxShowPass))
+                    .addComponent(jPasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton_Generate)
-                .addGap(10, 10, 10))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jCheckBox_showPass)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButtonGenerate))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(jLabelTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Generate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jCheckBox_showPass))
+                    .addComponent(jButtonGenerate))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelInsert)
+                    .addComponent(jCheckBoxShowPass))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox_showPassStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox_showPassStateChanged
-        char defaultEchoChar = jPasswordField.getEchoChar();
-        
-        if (jCheckBox_showPass.isSelected()) {
+    private void jCheckBoxShowPassStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBoxShowPassStateChanged
+        if (jCheckBoxShowPass.isSelected()) {
             jPasswordField.setEchoChar((char) 0);
         } else {
             jPasswordField.setEchoChar(defaultEchoChar);
         }    
-    }//GEN-LAST:event_jCheckBox_showPassStateChanged
+    }//GEN-LAST:event_jCheckBoxShowPassStateChanged
 
-    private void jButton_GenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GenerateActionPerformed
+    private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGenerateActionPerformed
         jPasswordField.setText(PasswordUtils.generatePassword());
-    }//GEN-LAST:event_jButton_GenerateActionPerformed
+    }//GEN-LAST:event_jButtonGenerateActionPerformed
 
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+        jPasswordField.requestFocus();
+    }//GEN-LAST:event_formFocusGained
 
+    private void jPasswordFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordFieldKeyPressed
+        KeyListener[] keyListeners = getKeyListeners();
+        for(KeyListener keyListener : keyListeners){
+            keyListener.keyPressed(evt);
+        }
+    }//GEN-LAST:event_jPasswordFieldKeyPressed
+
+    private final char defaultEchoChar;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_Generate;
-    private javax.swing.JCheckBox jCheckBox_showPass;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButtonGenerate;
+    private javax.swing.JCheckBox jCheckBoxShowPass;
+    private javax.swing.JLabel jLabelInsert;
+    private javax.swing.JLabel jLabelTitle;
     private javax.swing.JPasswordField jPasswordField;
     // End of variables declaration//GEN-END:variables
 }

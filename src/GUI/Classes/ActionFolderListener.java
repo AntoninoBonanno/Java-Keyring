@@ -6,18 +6,18 @@
 package GUI.Classes;
 
 import Classes.Folder;
-import Classes.KeyringObject;
+import Classes.Directory;
 import Classes.Page;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public interface ActionFolderListener {
-    void addFolderAction(Folder parentFolder, KeyringObject currentObject);
+    void addFolderAction(Folder parentFolder, Directory currentObject);
     void editFolderAction(Folder folder);
     void deleteFolderAction(Folder parentFolder, Folder folder);
-    void addPageAction(Folder parentFolder, KeyringObject currentObject);
+    void addPageAction(Folder parentFolder, Directory currentObject);
     void editPageAction(Page page);
     void deletePageAction(Folder parentFolder, Page page);
 }

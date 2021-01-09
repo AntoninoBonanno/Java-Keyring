@@ -19,15 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
 public class JKeyTable extends JTable {
 
@@ -50,6 +50,34 @@ public class JKeyTable extends JTable {
     public void showPassword(boolean showPassword){
         KeyTableModel table = (KeyTableModel) getModel();
         table.setShowPassword(showPassword);
+    }
+            
+    public void filter(String text){
+        clearSelection();
+        if(page == null) return;
+        
+        TableRowSorter<KeyTableModel> rowSorter = (TableRowSorter<KeyTableModel>) getRowSorter();
+        
+        if(text.isEmpty()) rowSorter.setRowFilter(null);
+        else rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+    }
+    
+    public void moveUpRow() throws KeyringException{
+        getRowSorter().setSortKeys(null);
+        
+        var rowIndex = getSelectedRow();
+        page.moveUpRow(rowIndex);
+        KeyTableModel table = (KeyTableModel) getModel();
+        table.reload();
+    }
+    
+    public void moveDownRow() throws KeyringException{
+        getRowSorter().setSortKeys(null);
+        
+        var rowIndex = getSelectedRow();
+        page.moveDownRow(rowIndex);
+        KeyTableModel table = (KeyTableModel) getModel();
+        table.reload();
     }
     
     /**
@@ -78,37 +106,6 @@ public class JKeyTable extends JTable {
             akl.onEditKeyAction(key);
         });
         table.reload();
-    }
-    
-    public void copySelectedKey(ColumnKeyEnum keyEnum) throws KeyringException {
-        var rowIndex = getSelectedRow();
-        if(rowIndex < 0) throw new KeyringException("Seleziona una riga", "Attenzione", KeyringException.WARNING_MESSAGE);
-        
-        KeyTableModel table = (KeyTableModel) getModel();
-        
-        boolean showPassword = table.isShowPassword();
-        table.setShowPassword(true);
-        
-        String cell = table.getValueAt(rowIndex, keyEnum); 
-        table.setShowPassword(showPassword);
-        if(cell == null) throw new KeyringException("Si è verificato un errore durante la selezione", "Errore", KeyringException.ERROR_MESSAGE);
-        
-        StringSelection stringSelection = new StringSelection(cell);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
-        
-        Toast toast = new Toast(0, 0);
-        toast.showtoast("si", "s");
-    }
-    
-    public void filter(String text){
-        clearSelection();
-        if(page == null) return;
-        
-        TableRowSorter<KeyTableModel> rowSorter = (TableRowSorter<KeyTableModel>) getRowSorter();
-        
-        if(text.isEmpty()) rowSorter.setRowFilter(null);
-        else rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
     }
     
     /**
@@ -193,13 +190,24 @@ public class JKeyTable extends JTable {
         jPopupMenuKeyTable.add(jMenuItemEditKey);
 
         jMenuItemDeleteKey.setText("Elimina");
+        jMenuItemDeleteKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDeleteKeyActionPerformed(evt);
+            }
+        });
         jPopupMenuKeyTable.add(jMenuItemDeleteKey);
 
         setModel(new KeyTableModel());
         setComponentPopupMenu(jPopupMenuKeyTable);
+        setDragEnabled(true);
         setRowSorter(new TableRowSorter<>(getModel()));
         setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemEditKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEditKeyActionPerformed
@@ -260,6 +268,28 @@ public class JKeyTable extends JTable {
         }
     }//GEN-LAST:event_jMenuItemNoteActionPerformed
 
+    private void jMenuItemDeleteKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteKeyActionPerformed
+        try {
+            var rowIndex = getSelectedRow();
+            if(rowIndex < 0) throw new KeyringException("Seleziona una riga", KeyringException.INFORMATION_MESSAGE);
+            
+            int result = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare la password?",
+                "Conferma eliminazione", JOptionPane.YES_NO_CANCEL_OPTION);
+            if(result != JOptionPane.YES_OPTION) return;
+        
+            KeyTableModel table = (KeyTableModel) getModel();            
+            page.removeKey(table.getKey(rowIndex));
+        } catch (KeyringException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ex.getTitle(), ex.getMessageType());
+        }
+    }//GEN-LAST:event_jMenuItemDeleteKeyActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if (evt.getClickCount() == 2) {
+            fireEditKeyAction();
+        }
+    }//GEN-LAST:event_formMouseClicked
+
     
     private Page page;    
     private final List<ActionKeyListener> actionKeyListeners = new ArrayList<>();
@@ -275,6 +305,21 @@ public class JKeyTable extends JTable {
     private javax.swing.JPopupMenu jPopupMenuKeyTable;
     // End of variables declaration//GEN-END:variables
 
-   
-
+   private void copySelectedKey(ColumnKeyEnum keyEnum) throws KeyringException {
+        var rowIndex = getSelectedRow();
+        if(rowIndex < 0) throw new KeyringException("Seleziona una riga", KeyringException.INFORMATION_MESSAGE);
+        
+        KeyTableModel table = (KeyTableModel) getModel();
+        
+        boolean showPassword = table.isShowPassword();
+        table.setShowPassword(true);
+        
+        String cell = table.getValueAt(rowIndex, keyEnum); 
+        table.setShowPassword(showPassword);
+        if(cell == null) throw new KeyringException("Si è verificato un errore durante la selezione", "Errore", KeyringException.ERROR_MESSAGE);
+        
+        StringSelection stringSelection = new StringSelection(cell);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
 }

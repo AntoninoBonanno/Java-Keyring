@@ -13,9 +13,9 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class KeyTableModel extends AbstractTableModel{
+public class KeyTableModel extends AbstractTableModel {
     
     private LinkedList<Key> keys;
     private boolean showPassword;

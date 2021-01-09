@@ -13,11 +13,11 @@ import java.util.Date;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public final class Key implements Serializable{
-      
-    private static final long serialVersionUID = 1999L;
+public final class Key implements Serializable{      
+    private static final long serialVersionUID = 1996L;
+    
     private String webSite, username, email, password, note;
     private Date updatedAt;
 
@@ -67,8 +67,7 @@ public final class Key implements Serializable{
     public void edit(String webSite, String username, String email, String password, String note) throws KeyringException{
         System.out.print("Modifico la key...   ");       
         if (webSite.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()){
-            System.out.println("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password."); 
-            throw new KeyringException("Inserisci il Sito web, l'email utilizzata, l'username utilizzato e la password.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            throw new KeyringException("Inserisci il Sito web, l'email, l'username e la password.",KeyringException.WARNING_MESSAGE);
         }
         
         this.webSite = webSite;

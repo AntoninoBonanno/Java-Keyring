@@ -6,9 +6,6 @@
 package Classes;
 
 import Exceptions.KeyringException;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.LinkedList;
@@ -16,9 +13,9 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Nino
+ * @author AntoninoBonanno <https://github.com/AntoninoBonanno>
  */
-public class Page extends KeyringObject implements Serializable, Comparable<Page>{
+public class Page extends Directory implements Serializable, Comparable<Page>{
     private static final long serialVersionUID = 1997L;
     
     private String info;    
@@ -53,16 +50,14 @@ public class Page extends KeyringObject implements Serializable, Comparable<Page
         System.out.println("Completato.");
     }
     
-    // ---
-
     /**
-     * Tabella contenente le password
+     * Recupera la tabella contenente le password
      * @return righe della tabella
      */
     public LinkedList<Key> getTableKeys() {
         return tableKeys;
     }
-        
+         
     /**
      * Aggiunge una riga alla tabella contenente le password
      * @param webSite Sito web di riferimento
@@ -85,6 +80,7 @@ public class Page extends KeyringObject implements Serializable, Comparable<Page
         
     /**
      * Elimina una key
+     * 
      * @param key Key da eliminare
      * @throws KeyringException Se non è stata trovata la key
      */
@@ -99,6 +95,9 @@ public class Page extends KeyringObject implements Serializable, Comparable<Page
         System.out.println("Completato.");        
     }
         
+    
+    
+    
     /**
      * Sposta di una posizione in alto una riga della tabella contenente le password
      * @param currentIndex Indice della riga da spostare
@@ -107,12 +106,10 @@ public class Page extends KeyringObject implements Serializable, Comparable<Page
     public void moveUpRow(int currentIndex) throws KeyringException{
         System.out.print("Porto sù la riga " + currentIndex + "...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga della tabella."); 
-            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            throw new KeyringException("Seleziona una riga della tabella.",KeyringException.INFORMATION_MESSAGE);
         } 
         if (currentIndex == 0){
-            System.out.println("La riga è in cima.");      
-            throw new KeyringException("La riga è in cima.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            throw new KeyringException("La riga è in cima.",KeyringException.INFORMATION_MESSAGE);
         }
         
         Key r = tableKeys.get(currentIndex);
@@ -129,12 +126,10 @@ public class Page extends KeyringObject implements Serializable, Comparable<Page
     public void moveDownRow(int currentIndex) throws KeyringException{
         System.out.print("Porto giù la riga " + currentIndex + "...   ");      
         if (currentIndex < 0 || currentIndex > tableKeys.size()-1){
-            System.out.println("Seleziona una riga della tabella."); 
-            throw new KeyringException("Seleziona una riga della tabella.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+            throw new KeyringException("Seleziona una riga della tabella.",KeyringException.INFORMATION_MESSAGE);
         } 
-        if (currentIndex == tableKeys.size()-1){
-            System.out.println("La riga è alla base.");                    
-            throw new KeyringException("La riga è alla base.","Attenzione",KeyringException.INFORMATION_MESSAGE);
+        if (currentIndex == tableKeys.size()-1){                 
+            throw new KeyringException("La riga è alla base.",KeyringException.INFORMATION_MESSAGE);
         }
         
         Key r = tableKeys.get(currentIndex);
